@@ -3,6 +3,10 @@
 :root {
   --navbarHeight: 8rem;
 
+
+  --vh: 1vh;
+  --doc-height: 100%;
+
   --font-base: "Poppins", "Roboto", "Oxygen", arial;
 
   --footer-foreground-rgb: 139, 139, 139;
@@ -39,9 +43,10 @@ html {
 
 html,
 body {
+  height: 100vh; /* fallback for Js load */
   max-width: 100vw;
-  max-height: 100vh;
-  height: 100vh;
+  max-height: var(--doc-height);
+  height: var(--doc-height);
   overflow-x: hidden;
   overflow-y: hidden;
   font-family: var(--font-base);
@@ -67,6 +72,6 @@ a {
 }
 
 #__next {
-  height: 100vh;
+  height: var(--doc-height);
   overflow: hidden;
 }
