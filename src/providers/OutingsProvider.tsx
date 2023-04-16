@@ -14,12 +14,6 @@ import {
 } from 'google-spreadsheet';
 const { GoogleSpreadsheet: Spreadsheet } = require('google-spreadsheet');
 
-
-
-// Type '({ title, description }: { title?: string | undefined; description?: string | undefined; }) => Promise<void>' is not assignable to type '() => Promise<void>'.ts(2322)
-
-
-
 interface OutingsContextType {
   rows: GoogleSpreadsheetRow[];
   addOuting: ({ title, description }: { title?: string | undefined; description?: string | undefined; }) => Promise<void>;

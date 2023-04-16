@@ -23,7 +23,7 @@ export default function Home({}: Props) {
       <Layout>
         <main className={styles.main}>
           <ul className={styles.list}>
-            {rows.map((row) => {
+            {rows.filter(row => +row.disabled !== 1).map((row) => {
               return (
                 <li key={row._rowNumber} className={styles.listItem}>
                   <h3>#{row._rowNumber} - {row.title}</h3>
