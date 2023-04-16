@@ -8,7 +8,7 @@ const theme = createTheme({
       default: "#535353",
     },
     text: {
-      primary: "#ffffff"
+      primary: "rgb(var(foreground-rgb))"
     },
     primary: {
       main: '#FFC0CB',
