@@ -1,10 +1,10 @@
 import utilStyles from "@/styles/utils.module.css";
-import Layout from "@/components/layout";
+import Layout from "@/components/Layout";
 import Link from "next/link";
 import Head from "next/head";
-import Date from "@/components/date";
+import Date from "@/components/Date";
 import { Movie } from "tmdb-ts";
-import { getMovieDetails } from "@/lib/movies";
+import { getMovieDetails } from "@/lib/outings";
 import Image from "next/image";
 
 export default function MovieDetail({ movieData }: { movieData: Movie }) {

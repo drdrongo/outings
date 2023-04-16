@@ -4,14 +4,14 @@ import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
 import utilStyles from "@/styles/utils.module.css";
 import Link from "next/link";
-import Date from "@/components/date";
-import Navbar from "@/components/navbar";
-import Banner from "@/components/banner";
-import { getUpcomingMoviesList } from "@/lib/movies";
+import Date from "@/components/Date";
+import Navbar from "@/components/Navbar";
+import Banner from "@/components/Banner";
+import { getUpcomingMoviesList } from "@/lib/outings";
 import { Movie } from "tmdb-ts";
 import listStyles from "@/styles/movieList.module.css";
 import { Star } from "@mui/icons-material";
-import Layout from "@/components/layout";
+import Layout from "@/components/Layout";
 
 interface Props {
   upcomingMoviesData: Movie[];
