@@ -44,6 +44,7 @@ html {
 html,
 body {
   height: 100vh; /* fallback for Js load */
+  max-height: 100vh; /* fallback for Js load */
   max-width: 100vw;
   max-height: var(--doc-height);
   height: var(--doc-height);

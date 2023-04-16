@@ -1,7 +1,9 @@
 .heroContainer {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100vh; /* fallback for Js load */
+  min-height: 100vh; /* fallback for Js load */
+  max-height: 100vh; /* fallback for Js load */
   height: var(--doc-height);
   min-height: var(--doc-height);
   max-height: var(--doc-height);
