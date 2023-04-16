@@ -17,18 +17,21 @@ const { GoogleSpreadsheet: Spreadsheet } = require('google-spreadsheet');
 interface OutingsContextType {
   rows: GoogleSpreadsheetRow[];
   addOuting: ({ title, description }: { title?: string | undefined; description?: string | undefined; }) => Promise<void>;
+  loading: boolean;
 }
 
 // Default values for contacts context
 export const OutingsContext = createContext<OutingsContextType>({
   rows: [],
   addOuting: async () => {},
+  loading: false,
 });
 
 export const OutingsProvider = ({ children }: { children: ReactNode }) => {
   const [doc, setDoc] = useState<GoogleSpreadsheet>();
   const [sheet, setSheet] = useState<GoogleSpreadsheetWorksheet>();
   const [rows, setRows] = useState<GoogleSpreadsheetRow[]>([]);
+  const [loading, setLoading] = useState(false);
 
   const addOuting = useCallback(
     async ({ title = '', description = '' }) => {
@@ -63,6 +66,7 @@ export const OutingsProvider = ({ children }: { children: ReactNode }) => {
     };
 
     (async () => {
+      setLoading(true);
       const doc: GoogleSpreadsheet = new Spreadsheet(
         process.env.NEXT_PUBLIC_GOOGLE_SHEET_ID
       );
@@ -79,11 +83,16 @@ export const OutingsProvider = ({ children }: { children: ReactNode }) => {
 
   // Gets rows
   useEffect(() => {
-    if (sheet) sheet.getRows().then((rows) => setRows(rows));
+    if (!sheet) return;
+
+    sheet.getRows().then((rows) => {
+      setRows(rows || []);
+      setLoading(false);
+    });
   }, [sheet]);
 
   return (
-    <OutingsContext.Provider value={{ rows, addOuting }}>
+    <OutingsContext.Provider value={{ rows, addOuting, loading }}>
       {children}
     </OutingsContext.Provider>
   );

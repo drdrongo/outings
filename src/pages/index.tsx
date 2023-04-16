@@ -4,13 +4,14 @@ import Layout from '@/components/Layout';
 import { useOutingsContext } from '@/providers/OutingsProvider';
 import Link from 'next/link';
 import { AddCircle } from '@mui/icons-material';
+import { CircularProgress } from '@mui/material';
 
 interface Props {
   // upcomingMoviesData: Movie[];
 }
 
 export default function Home({}: Props) {
-  const { rows } = useOutingsContext();
+  const { rows, loading } = useOutingsContext();
   return (
     <>
       <Head>
@@ -23,14 +24,24 @@ export default function Home({}: Props) {
       <Layout>
         <main className={styles.main}>
           <ul className={styles.list}>
-            {rows.filter(row => +row.disabled !== 1).map((row) => {
-              return (
-                <li key={row._rowNumber} className={styles.listItem}>
-                  <h3>#{row._rowNumber} - {row.title}</h3>
-                  <p className={styles.description}>{row.description}</p>
-                </li>
-              );
-            })}
+            {loading ? (
+              <div className={styles.loading}>
+                <CircularProgress color='secondary' />
+              </div>
+            ) : (
+              rows
+                .filter((row) => +row.disabled !== 1)
+                .map((row) => {
+                  return (
+                    <li key={row._rowNumber} className={styles.listItem}>
+                      <h3>
+                        #{row._rowNumber} - {row.title}
+                      </h3>
+                      <p className={styles.description}>{row.description}</p>
+                    </li>
+                  );
+                })
+            )}
           </ul>
         </main>
       </Layout>
