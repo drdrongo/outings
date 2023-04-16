@@ -1,18 +1,17 @@
-import "@/styles/globals.css";
-import { createTheme } from "@mui/material";
-import type { AppProps } from "next/app";
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#GHCDAB",
-    },
-  },
-  typography: {
-    fontFamily: "Poppins",
-  },
-});
+import { OutingsProvider } from '@/providers/OutingsProvider';
+import '@/styles/globals.css';
+import type { AppProps } from 'next/app';
+import { QueryClient, QueryClientProvider } from 'react-query';
+const queryClient = new QueryClient();
 
 export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />;
+  return (
+    // <MuiThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <OutingsProvider>
+        <Component {...pageProps} />
+      </OutingsProvider>
+    </QueryClientProvider>
+    // </MuiThemeProvider>
+  );
 }

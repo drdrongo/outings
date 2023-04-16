@@ -9,13 +9,13 @@ const Navbar: React.FC = () => {
     <nav className={styles.navbar}>
       {/* Logo */}
       <Link href="/">
-        <Image
+        {/* <Image
           src="/images/movie-lab-logos/png/movie-lab-white-no-bg.png"
           width={60}
           height={60}
           alt="MovieLab logo"
           className={styles.logo}
-        />
+        /> */}
       </Link>
 
       {/* Searchbar */}

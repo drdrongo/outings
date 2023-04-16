@@ -1,6 +1,21 @@
-.container {
-  /* max-width: 36rem; */
-  /* padding: 0 1rem; */
-  /* margin: 3rem auto 6rem; */
-  /* border: 1px solid red; */
+.heroContainer {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  height: 100vh;
+  max-height: 100vh;
+  overflow-y: hidden;
+}
+
+.contentContainer {
+  max-width: 160rem;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  width: 100%;
+  /* min-height: calc(100vh - var(--navbarHeight)); */
+  padding-bottom: 8rem;
+  border: 1px solid red;
+  overflow-y: auto;
 }

@@ -1,9 +1,14 @@
 .footer {
   width: 100%;
-  height: 30rem;
+  height: 8rem;
   background-color: grey;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
+  align-items: stretch;
+  justify-content: stretch;
+}
+
+.navButton {
+  flex-grow: 1;
+  height: 100%;
+  border: 1px solid red;
 }

@@ -3,7 +3,6 @@ import Layout from "@/components/Layout";
 import Link from "next/link";
 import Head from "next/head";
 import Date from "@/components/Date";
-import { Movie } from "tmdb-ts";
 import { getMovieDetails } from "@/lib/outings";
 import Image from "next/image";
 
@@ -39,7 +38,7 @@ export default function MovieDetail({ movieData }: { movieData: Movie }) {
 
 export async function getStaticPaths() {
   return {
-    paths: ["/movies/*"],
+    paths: ["/outings/*"],
     // fallback: true, false or "blocking" // See the "fallback" section below
     fallback: true,
   };

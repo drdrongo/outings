@@ -1,28 +1,39 @@
-import axios from "axios";
+import axios from 'axios';
 
-const BASE_URL = "https://www.yourdomain.com/api";
+// export const initialize = async () => {
+// // Fetch necessary data for the movie using params.id
+//   const doc = await axios.get('/api/movies/initialize');
+//   console.log({ docInInitialize: doc });
+//   return doc;
+// };
 
-export const createUser = async (body: any) => {
-  const response = await axios.post(`${BASE_URL}/users`, body);
-  return response.data;
-};
 
-export const getUserList = async () => {
-  const response = await axios.get(`${BASE_URL}/users`);
-  return response.data;
-};
+  // // Change sheet to index of whatever.
+  // const changeSheet = useCallback(
+  //   (i = 0) => {
+  //     doc && setSheet(doc.sheetsByIndex[i]);
+  //   },
+  //   [doc]
+  // );
 
-export const getUserDetails = async (userId: number) => {
-  const response = await axios.get(`${BASE_URL}/users/${userId}`);
-  return response.data;
-};
+  // useEffect(() => {
 
-export const updateUser = async (body: any) => {
-  const response = await axios.put(`${BASE_URL}/users`, body);
-  return response.data;
-};
+  //   (async () => {
 
-export const deleteUser = async (userId: number) => {
-  const response = await axios.delete(`${BASE_URL}/users/${userId}`);
-  return response.data;
-};
+  //     console.log('=====')
+  //     console.log(doc);
+  //   if (!doc) return;
+  //     await doc.loadInfo(); // <== What does this thing do?
+  //     setSheet(doc.sheetsByIndex[0]);
+  //   })();
+  // }, [doc]);
+
+  // // Fetches and sets the rows for the current sheet
+  // useEffect(() => {
+  //   (async () => {
+  //     if (!sheet) return;
+
+  //     const sheetRows = await sheet.getRows();
+  //     setRows(sheetRows);
+  //   })();
+  // }, [sheet]);
