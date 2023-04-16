@@ -22,21 +22,16 @@ export default function Home({}: Props) {
 
       <Layout>
         <main className={styles.main}>
-          <ul>
+          <ul className={styles.list}>
             {rows.map((row) => {
               return (
-                <li key={row._rowNumber}>
-                  <p>{row._rowNumber}</p>
-                  <h3>{row.title}</h3>
-                  <p>{row.description}</p>
+                <li key={row._rowNumber} className={styles.listItem}>
+                  <h3>#{row._rowNumber} - {row.title}</h3>
+                  <p className={styles.description}>{row.description}</p>
                 </li>
               );
             })}
           </ul>
-
-          <Link href='/outings/new' className={styles.addButton}>
-            <AddCircle />
-          </Link>
         </main>
       </Layout>
     </>

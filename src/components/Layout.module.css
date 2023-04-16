@@ -14,8 +14,5 @@
   flex-direction: column;
   flex-grow: 1;
   width: 100%;
-  /* min-height: calc(100vh - var(--navbarHeight)); */
-  padding-bottom: 8rem;
-  border: 1px solid red;
   overflow-y: auto;
 }

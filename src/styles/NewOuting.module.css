@@ -2,7 +2,18 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 6rem;
-  min-height: 100vh;
+  justify-content: flex-end;
+  padding: 3rem;
+  flex-grow: 1;
 }
 
+.fullWidth {
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.save {
+  width: 100%;
+  margin-top: 2rem;
+  font-size: 2.2rem;
+}

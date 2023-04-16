@@ -1,3 +1,4 @@
+import MuiThemeProvider from '@/providers/MuiThemeProvider';
 import { OutingsProvider } from '@/providers/OutingsProvider';
 import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
@@ -6,12 +7,12 @@ const queryClient = new QueryClient();
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    // <MuiThemeProvider>
+    <MuiThemeProvider>
     <QueryClientProvider client={queryClient}>
       <OutingsProvider>
         <Component {...pageProps} />
       </OutingsProvider>
     </QueryClientProvider>
-    // </MuiThemeProvider>
+    </MuiThemeProvider>
   );
 }
