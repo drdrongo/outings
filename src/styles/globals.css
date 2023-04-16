@@ -3,8 +3,8 @@
 :root {
   --navbarHeight: 8rem;
 
-
-  --vh: 1vh;
+  /* These are for sizing in pwa: */
+  --vh: 1vh; 
   --doc-height: 100%;
 
   --font-base: "Poppins", "Roboto", "Oxygen", arial;

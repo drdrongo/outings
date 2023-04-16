@@ -18,7 +18,7 @@ const theme = createTheme({
     }
   },
   typography: {
-    fontFamily: 'Poppins',
+    fontFamily: 'Poppins, Roboto, Oxygen, arial',
     fontSize: 18,
   },
 });
