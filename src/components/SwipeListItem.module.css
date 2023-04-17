@@ -6,8 +6,8 @@
   position: relative;
   z-index: 1;
   overflow-x: hidden;
-}
 
+}
 
 .listItem h3 {
   margin-bottom: 1rem;
@@ -50,8 +50,9 @@
 
 .underlay button svg {
   font-size: 3rem;
+  color: rgb(var(--foreground-rgb));
 }
 
 .delete {
-  background-color: rgba(200, 0 ,0, 0.3);
+  background-color: rgba(200, 0, 0, 0.3);
 }

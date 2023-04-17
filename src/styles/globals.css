@@ -4,7 +4,7 @@
   --navbarHeight: 8rem;
 
   /* These are for sizing in pwa: */
-  --vh: 1vh; 
+  --vh: 1vh;
   --doc-height: 100%;
 
   --font-base: "Poppins", "Roboto", "Oxygen", arial;
@@ -39,21 +39,36 @@
 html {
   font-size: 62.5%;
   background-color: #222;
+
+  /* padding: 1rem; */
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  min-height: 100%;
+  padding-top: env(safe-area-inset-top, 50px);
+  padding-bottom: env(safe-area-inset-bottom, 20px);
 }
 
 html,
 body {
-  height: 100vh; /* fallback for Js load */
-  max-height: 100vh; /* fallback for Js load */
+  /* fallback for Js load */
+  /* height: 100vh; */
+  /* fallback for Js load */
+  /* max-height: 100vh;
   max-width: 100vw;
-  max-height: var(--doc-height);
-  height: var(--doc-height);
+  max-height: var(--doc-height); */
+  /* height: var(--doc-height); */
+  height: 100%;
   overflow-x: hidden;
   overflow-y: hidden;
   font-family: var(--font-base);
 }
 
 body {
+  min-height: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: -webkit-fill-available;
   font-size: 1.6em;
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(to bottom,
@@ -73,6 +88,6 @@ a {
 }
 
 #__next {
-  height: var(--doc-height);
+  height: 100%;
   overflow: hidden;
 }

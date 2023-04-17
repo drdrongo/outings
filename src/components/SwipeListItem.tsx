@@ -26,8 +26,8 @@ const SwipeListItem = ({ row, open, setOpen, deleteRow }: Props) => {
     const currentTouch = e.touches[0].clientX;
     const diff = touchDown - currentTouch;
 
-    if (diff > 5) setOpen(row._rowNumber);
-    if (diff < -5) setOpen(null);
+    if (diff > 10) setOpen(row._rowNumber);
+    if (diff < -10) setOpen(null);
 
     setTouchPosition(null);
   };
