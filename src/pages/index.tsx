@@ -2,9 +2,8 @@ import Head from 'next/head';
 import styles from '@/styles/Home.module.css';
 import Layout from '@/components/Layout';
 import { useOutingsContext } from '@/providers/OutingsProvider';
-import Link from 'next/link';
-import { AddCircle } from '@mui/icons-material';
 import { CircularProgress } from '@mui/material';
+import SwipeList from '@/components/SwipeList';
 
 interface Props {
   // upcomingMoviesData: Movie[];
@@ -23,26 +22,13 @@ export default function Home({}: Props) {
 
       <Layout>
         <main className={styles.main}>
-          <ul className={styles.list}>
-            {loading ? (
-              <div className={styles.loading}>
-                <CircularProgress color='secondary' />
-              </div>
-            ) : (
-              rows
-                .filter((row) => +row.disabled !== 1)
-                .map((row) => {
-                  return (
-                    <li key={row._rowNumber} className={styles.listItem}>
-                      <h3>
-                        #{row._rowNumber} - {row.title}
-                      </h3>
-                      <p className={styles.description}>{row.description}</p>
-                    </li>
-                  );
-                })
-            )}
-          </ul>
+          {loading ? (
+            <div className={styles.loading}>
+              <CircularProgress color='secondary' />
+            </div>
+          ) : (
+            <SwipeList rows={rows.filter((row) => +row.disabled !== 1)} />
+          )}
         </main>
       </Layout>
     </>

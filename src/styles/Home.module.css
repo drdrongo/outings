@@ -3,31 +3,8 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: 2.4rem;
+  padding: 2.4rem 0;
   flex-grow: 1;
-}
-
-.list {
-  list-style: none;
-  width: 100%;
-}
-
-.listItem {
-  min-height: 12rem;
-  border-bottom: 1px solid grey;
-  display: flex;
-  flex-direction: column;
-  padding: 1.2rem;
-}
-
-.listItem h3 {
-  margin-bottom: 1rem;
-}
-.titleBox p {
-}
-
-.description {
-
 }
 
 .loading {

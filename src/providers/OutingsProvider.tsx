@@ -16,8 +16,15 @@ const { GoogleSpreadsheet: Spreadsheet } = require('google-spreadsheet');
 
 interface OutingsContextType {
   rows: GoogleSpreadsheetRow[];
-  addOuting: ({ title, description }: { title?: string | undefined; description?: string | undefined; }) => Promise<void>;
+  addOuting: ({
+    title,
+    description,
+  }: {
+    title?: string | undefined;
+    description?: string | undefined;
+  }) => Promise<void>;
   loading: boolean;
+  deleteOuting: (rowIdx: number) => void;
 }
 
 // Default values for contacts context
@@ -25,6 +32,7 @@ export const OutingsContext = createContext<OutingsContextType>({
   rows: [],
   addOuting: async () => {},
   loading: false,
+  deleteOuting: (rowIdx: number) => {},
 });
 
 export const OutingsProvider = ({ children }: { children: ReactNode }) => {
@@ -48,6 +56,24 @@ export const OutingsProvider = ({ children }: { children: ReactNode }) => {
       }
     },
     [sheet]
+  );
+
+  const deleteOuting = useCallback(
+    async (rowNumber: number) => {
+      if (!rows) return;
+
+      const row = rows.find(row => row._rowNumber === rowNumber);
+      if (!row) {
+        console.error('Row not found');
+        return;
+      }
+      
+      row.disabled = 1; // update a value
+      row.save(); // save updates
+      setRows(prev => [...prev.filter(r => r._rowNumber !== rowNumber)]);
+      // await rows[rowIdx].delete(); // delete a row
+    },
+    [rows]
   );
 
   // Gets doc
@@ -92,7 +118,7 @@ export const OutingsProvider = ({ children }: { children: ReactNode }) => {
   }, [sheet]);
 
   return (
-    <OutingsContext.Provider value={{ rows, addOuting, loading }}>
+    <OutingsContext.Provider value={{ rows, addOuting, deleteOuting, loading }}>
       {children}
     </OutingsContext.Provider>
   );
