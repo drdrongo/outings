@@ -1,17 +1,17 @@
 .heroContainer {
   display: flex;
   flex-direction: column;
-  /* height: 100vh; */
+  height: 100%;
   /* fallback for Js load */
-  /* min-height: 100vh; */
+  min-height: 100%;
   /* fallback for Js load */
-  /* max-height: 100vh; */
-  height: var(--doc-height);
+  max-height: 100%;
+  /* height: var(--doc-height); */
   /* fallback for Js load */
   /* height: var(--doc-height); */
   /* min-height: var(--doc-height); */
-  max-height: var(--doc-height);
-  min-height: var(--doc-height);
+  /* max-height: var(--doc-height); */
+  /* min-height: var(--doc-height); */
   overflow-y: hidden;
   flex-grow: 1;
   /* height: 100%; */
