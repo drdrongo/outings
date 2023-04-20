@@ -41,11 +41,11 @@ html {
   background-color: #222;
 
   /* padding: 1rem; */
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  /* padding-top: 1rem;
+  padding-bottom: 1rem; */
   min-height: 100%;
-  padding-top: env(safe-area-inset-top, 50px);
-  padding-bottom: env(safe-area-inset-bottom, 20px);
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 html,
