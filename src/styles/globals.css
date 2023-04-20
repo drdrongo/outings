@@ -45,7 +45,7 @@ html {
   padding-bottom: 1rem; */
   min-height: 100%;
   padding-top: env(safe-area-inset-top);
-  padding-bottom: env(safe-area-inset-bottom);
+  /* padding-bottom: env(safe-area-inset-bottom); */
 }
 
 html,
