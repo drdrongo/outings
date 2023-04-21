@@ -14,6 +14,7 @@ const SwipeList = ({ rows }: { rows: GoogleSpreadsheetRow[] }) => {
         return (
           <SwipeListItem
             key={row._rowNumber}
+            idx={idx}
             row={row}
             open={+row._rowNumber === openRowNumber}
             setOpen={(num: number | null) => setOpenRowNumber(num)}

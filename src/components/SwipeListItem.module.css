@@ -6,7 +6,6 @@
   position: relative;
   z-index: 1;
   overflow-x: hidden;
-
 }
 
 .listItem h3 {
@@ -55,4 +54,16 @@
 
 .delete {
   background-color: rgba(200, 0, 0, 0.3);
+}
+
+.white {}
+
+.grey {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+@media (prefers-color-scheme: dark) {
+  .grey {
+    background-color: rgba(240, 240, 240, 0.1);
+  }
 }

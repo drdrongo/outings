@@ -9,9 +9,10 @@ interface Props {
   open: boolean;
   setOpen: (num: number | null) => void;
   deleteRow: () => void;
+  idx?: number;
 }
 
-const SwipeListItem = ({ row, open, setOpen, deleteRow }: Props) => {
+const SwipeListItem = ({ row, open, setOpen, deleteRow, idx }: Props) => {
   const [touchPosition, setTouchPosition] = useState<number | null>(null);
 
   const handleTouchStart = (e: React.TouchEvent<HTMLLIElement>) => {
@@ -35,9 +36,10 @@ const SwipeListItem = ({ row, open, setOpen, deleteRow }: Props) => {
   return (
     <li
       key={row._rowNumber}
-      className={styles.listItem}
+      className={clsx(styles.listItem, (idx && idx % 2 ? styles.grey : ''))}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
+      // onClick={}
     >
       <div className={clsx(styles.draggable, open && styles.open)}>
         <div className={styles.rowContent}>
