@@ -25,6 +25,8 @@ interface OutingsContextType {
   }) => Promise<void>;
   loading: boolean;
   deleteOuting: (rowIdx: number) => void;
+  selectOuting: (outing: GoogleSpreadsheetRow | null) => void;
+  currentOuting: GoogleSpreadsheetRow | null;
 }
 
 // Default values for contacts context
@@ -33,6 +35,8 @@ export const OutingsContext = createContext<OutingsContextType>({
   addOuting: async () => {},
   loading: false,
   deleteOuting: (rowIdx: number) => {},
+  selectOuting: (outing: GoogleSpreadsheetRow | null) => {},
+  currentOuting: null,
 });
 
 export const OutingsProvider = ({ children }: { children: ReactNode }) => {
@@ -40,6 +44,16 @@ export const OutingsProvider = ({ children }: { children: ReactNode }) => {
   const [sheet, setSheet] = useState<GoogleSpreadsheetWorksheet>();
   const [rows, setRows] = useState<GoogleSpreadsheetRow[]>([]);
   const [loading, setLoading] = useState(false);
+
+  const [currentOuting, setCurrentOuting] = useState<GoogleSpreadsheetRow | null>(null);
+
+  const selectOuting = useCallback((outing: GoogleSpreadsheetRow | null) => {
+    if (outing) {
+      setCurrentOuting(outing);
+    } else {
+      setCurrentOuting(null);
+    }
+  }, []);
 
   const addOuting = useCallback(
     async ({ title = '', description = '' }) => {
@@ -118,7 +132,7 @@ export const OutingsProvider = ({ children }: { children: ReactNode }) => {
   }, [sheet]);
 
   return (
-    <OutingsContext.Provider value={{ rows, addOuting, deleteOuting, loading }}>
+    <OutingsContext.Provider value={{ rows, addOuting, deleteOuting, loading, selectOuting, currentOuting }}>
       {children}
     </OutingsContext.Provider>
   );

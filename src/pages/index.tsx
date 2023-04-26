@@ -2,7 +2,7 @@ import Head from 'next/head';
 import styles from '@/styles/Home.module.css';
 import Layout from '@/components/Layout';
 import { useOutingsContext } from '@/providers/OutingsProvider';
-import { CircularProgress } from '@mui/material';
+import { Button, CircularProgress } from '@mui/material';
 import SwipeList from '@/components/SwipeList';
 import { BottomSheet } from 'react-spring-bottom-sheet';
 import 'react-spring-bottom-sheet/dist/style.css';
@@ -13,12 +13,10 @@ interface Props {
 }
 
 export default function Home({}: Props) {
-  const { rows, loading } = useOutingsContext();
-  const [open, setOpen] = useState(false);
+  const { rows, loading, currentOuting, selectOuting } = useOutingsContext();
   function onDismiss() {
-    setOpen(false)
+    selectOuting(null);
   }
-
 
   return (
     <>
@@ -41,7 +39,17 @@ export default function Home({}: Props) {
         </main>
 
         {/* <button onClick={() => setOpen(true)}>Open</button> */}
-        <BottomSheet open={open} onDismiss={onDismiss}>My awesome content here</BottomSheet>
+        <BottomSheet open={!!currentOuting} onDismiss={onDismiss}>
+          <Button onClick={onDismiss}>Close</Button>
+          {currentOuting ? (
+            <div>
+              <h2>{currentOuting.title}</h2>
+              <p>{currentOuting.description}</p>
+            </div>
+          ) : (
+            <div></div>
+          )}
+        </BottomSheet>
       </Layout>
     </>
   );

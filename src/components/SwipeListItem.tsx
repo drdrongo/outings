@@ -3,6 +3,7 @@ import { useState } from 'react';
 import styles from './SwipeListItem.module.css';
 import clsx from 'clsx';
 import { Delete } from '@mui/icons-material';
+import { useOutingsContext } from '@/providers/OutingsProvider';
 
 interface Props {
   row: GoogleSpreadsheetRow;
@@ -13,6 +14,8 @@ interface Props {
 }
 
 const SwipeListItem = ({ row, open, setOpen, deleteRow, idx }: Props) => {
+  const { selectOuting } = useOutingsContext();
+
   const [touchPosition, setTouchPosition] = useState<number | null>(null);
 
   const handleTouchStart = (e: React.TouchEvent<HTMLLIElement>) => {
@@ -39,7 +42,7 @@ const SwipeListItem = ({ row, open, setOpen, deleteRow, idx }: Props) => {
       className={clsx(styles.listItem, (idx && idx % 2 ? styles.grey : ''))}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
-      // onClick={}
+      onClick={() => selectOuting(row)}
     >
       <div className={clsx(styles.draggable, open && styles.open)}>
         <div className={styles.rowContent}>
