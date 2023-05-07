@@ -25,6 +25,9 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const fn = isDark ? 'add' : 'remove';
     document.documentElement.classList[fn]('dark');
+
+    const bgColor = isDark ? '#3E3D3D' : '#FFFFFF';
+    document?.querySelector('meta[name="theme-color"]')?.setAttribute('content', bgColor);
   }, [isDark]);
 
   useEffect(() => {

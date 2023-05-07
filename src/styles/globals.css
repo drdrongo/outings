@@ -48,7 +48,7 @@
   --shadow-primary: 0 8px 16px 5px hsla(227, 83%, 86%, 0.28);
   --shadow-secondary: 0 4px 12px 3px hsla(240, 58%, 63%, 0.133);
 
-  --clr-button-background: linear-gradient(45deg, #3B357D, #504D6E);
+  --clr-button-background: linear-gradient(100deg, #585295, #3b5472);
 
 }
 

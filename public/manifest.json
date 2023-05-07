@@ -1,7 +1,7 @@
 {
   "name": "Outings",
   "short_name": "Outings",
-  "theme_color": "#FFC0CB",
+  "theme_color": "#FFF",
   "background_color": "#fff",
   "display": "standalone",
   "orientation": "portrait",
