@@ -44,8 +44,6 @@ const SwipeListItem = ({ row, open, setOpen, deleteRow, idx }: Props) => {
     return `hsl(${hue}, ${saturation}, ${lightness})`;
   }
 
-  const tags = ['Chill', 'Adventure', 'Day Trip', 'Fun'];
-
   return (
     <li
       key={row._rowNumber}
@@ -59,7 +57,7 @@ const SwipeListItem = ({ row, open, setOpen, deleteRow, idx }: Props) => {
           <p className={styles.description}>{row.description}</p>
 
           <div className={styles.tagBox}>
-            {tags.map((tag) => {
+            {row.tags?.split('|')?.map((tag: string) => {
               const color = stringToColor(tag);
               return (
                 <span
