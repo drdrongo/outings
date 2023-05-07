@@ -1,32 +1,60 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;800&display=swap');
 
 :root {
-  --navbarHeight: 8rem;
-
-  /* These are for sizing in pwa: */
-  --vh: 1vh;
-  --doc-height: 100%;
-
-  --font-base: "Poppins", "Roboto", "Oxygen", arial;
-
-  --footer-foreground-rgb: 139, 139, 139;
-  --footer-background-rgb: 231, 231, 231;
+  --font-base: "Inter", "Roboto", "Oxygen", arial, sans-serif;
 
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 242, 242, 242;
   --background-end-rgb: 255, 255, 255;
 
-  --clrPrimary: #CA3433;
+  /* ------ */
+  --clr-base-background: #FAF9FF;
+  --clr-background: #FFFFFF;
+  --clr-foreground: #504D6E;
+
+  --clr-primary: #BECBF9;
+  --clr-primary-dark: #A7B8F6;
+  --clr-primary-light: #ECEFFD;
+
+  --clr-secondary: #FD9D9B;
+  --clr-secondary-dark: #FC817F;
+  --clr-secondary-light: #FEE2E1;
+
+  /* offset-x | offset-y | blur-radius | spread-radius | color */
+  --shadow-primary: 0 8px 16px 5px hsla(227, 83%, 86%, 0.28);
+  --shadow-secondary: 0 4px 12px 3px hsla(240, 58%, 63%, 0.133);
+
+  --clr-button-background: linear-gradient(45deg, #B1C3FF, #E0E7FF);
+}
+
+
+/* @media (prefers-color-scheme: dark) { */
+:root.dark {
+  color-scheme: dark;
+
+  --clr-base-background: #515151;
+  --clr-background: #3E3D3D;
+  --clr-foreground: #FFFFFF;
+
+  --clr-primary: #BECBF9;
+  --clr-primary-dark: #A7B8F6;
+  --clr-primary-light: #ECEFFD;
+
+  --clr-secondary: #FD9D9B;
+  --clr-secondary-dark: #FC817F;
+  --clr-secondary-light: #FEE2E1;
+
+  /* offset-x | offset-y | blur-radius | spread-radius | color */
+  --shadow-primary: 0 8px 16px 5px hsla(227, 83%, 86%, 0.28);
+  --shadow-secondary: 0 4px 12px 3px hsla(240, 58%, 63%, 0.133);
+
+  --clr-button-background: linear-gradient(45deg, #3B357D, #504D6E);
+
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 242, 242, 242;
-    --background-start-rgb: 20, 20, 20;
-    --background-end-rgb: 110, 80, 80;
-
-    /* --footer-foreground-rgb: 0, 0, 0; */
-    --footer-background-rgb: 63, 63, 63;
+    color-scheme: dark;
   }
 }
 
@@ -39,10 +67,6 @@
 html {
   font-size: 62.5%;
   background-color: #222;
-
-  /* padding: 1rem; */
-  /* padding-top: 1rem;
-  padding-bottom: 1rem; */
   min-height: 100%;
   padding-top: env(safe-area-inset-top);
   /* padding-bottom: env(safe-area-inset-bottom); */
@@ -50,13 +74,6 @@ html {
 
 html,
 body {
-  /* fallback for Js load */
-  /* height: 100vh; */
-  /* fallback for Js load */
-  /* max-height: 100vh;
-  max-width: 100vw;
-  max-height: var(--doc-height); */
-  /* height: var(--doc-height); */
   height: 100%;
   overflow-x: hidden;
   overflow-y: hidden;
@@ -70,10 +87,8 @@ body {
   flex-direction: column;
   min-height: -webkit-fill-available;
   font-size: 1.6em;
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+  color: var(--clr-foreground);
+  background: var(--clr-base-background);
 }
 
 a {
@@ -81,11 +96,6 @@ a {
   text-decoration: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-}
 
 #__next {
   height: 100%;

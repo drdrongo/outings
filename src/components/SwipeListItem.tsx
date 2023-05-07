@@ -33,21 +33,47 @@ const SwipeListItem = ({ row, open, setOpen, deleteRow, idx }: Props) => {
     setTouchPosition(null);
   };
 
+  function stringToColor(str: string): string {
+    let hue = 0;
+    for (let i = 0; i < str.length; i++) {
+      hue += str.charCodeAt(i);
+    }
+    hue %= 360;
+    const saturation = '45%';
+    const lightness = '65%';
+    return `hsl(${hue}, ${saturation}, ${lightness})`;
+  }
+
+  const tags = ['Chill', 'Adventure', 'Day Trip', 'Fun'];
+
   return (
     <li
       key={row._rowNumber}
-      className={clsx(styles.listItem, (idx && idx % 2 ? styles.grey : ''))}
+      className={clsx(styles.listItem, idx && idx % 2 ? styles.grey : '')}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
-      // onClick={}
     >
       <div className={clsx(styles.draggable, open && styles.open)}>
         <div className={styles.rowContent}>
-          <h3>
-            #{row._rowNumber} - {row.title}
-          </h3>
+          <h3>{row.title}</h3>
           <p className={styles.description}>{row.description}</p>
+
+          <div className={styles.tagBox}>
+            {tags.map((tag) => {
+              const color = stringToColor(tag);
+              return (
+                <span
+                  key={tag}
+                  className={styles.tag}
+                  style={{ borderColor: color, color }}
+                >
+                  {tag}
+                </span>
+              );
+            })}
+          </div>
         </div>
+
         <div className={styles.underlay}>
           <button className={styles.delete} onClick={deleteRow}>
             <Delete />
