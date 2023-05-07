@@ -1,0 +1,11 @@
+.alertBox {
+  position: fixed;
+  z-index: 99999;
+  --margin: 1.6rem;
+  width: calc(100% - var(--margin) * 2);
+  margin: var(--margin);
+}
+
+.alert {
+  margin-bottom: 1rem;
+}

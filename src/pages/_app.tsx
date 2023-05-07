@@ -1,3 +1,5 @@
+import NewOutingModal from '@/components/NewOutingModal';
+import { AlertProvider } from '@/providers/AlertProvider';
 import MuiThemeProvider from '@/providers/MuiThemeProvider';
 import { OutingsProvider } from '@/providers/OutingsProvider';
 import { ThemeProvider } from '@/providers/ThemeProvider';
@@ -12,9 +14,13 @@ export default function App({ Component, pageProps }: AppProps) {
     <MuiThemeProvider>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
-          <OutingsProvider>
-            <Component {...pageProps} />
-          </OutingsProvider>
+          <AlertProvider>
+            <OutingsProvider>
+              <Component {...pageProps} />
+
+              <NewOutingModal />
+            </OutingsProvider>
+          </AlertProvider>
         </ThemeProvider>
       </QueryClientProvider>
     </MuiThemeProvider>
