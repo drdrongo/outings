@@ -19,20 +19,28 @@ interface OutingsContextType {
   addOuting: ({
     title,
     description,
+    tags,
   }: {
     title?: string | undefined;
     description?: string | undefined;
-  }) => Promise<void>;
+    tags?: string | undefined;
+  }) => Promise<boolean>;
   loading: boolean;
   deleteOuting: (rowIdx: number) => void;
+  modalOpen: boolean;
+  toggleModal: () => void;
+  allTags: string[];
 }
 
 // Default values for contacts context
 export const OutingsContext = createContext<OutingsContextType>({
   rows: [],
-  addOuting: async () => {},
+  addOuting: async () => false,
   loading: false,
   deleteOuting: (rowIdx: number) => {},
+  modalOpen: false,
+  toggleModal: () => {},
+  allTags: [],
 });
 
 export const OutingsProvider = ({ children }: { children: ReactNode }) => {
@@ -40,37 +48,48 @@ export const OutingsProvider = ({ children }: { children: ReactNode }) => {
   const [sheet, setSheet] = useState<GoogleSpreadsheetWorksheet>();
   const [rows, setRows] = useState<GoogleSpreadsheetRow[]>([]);
   const [loading, setLoading] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [allTags, setAllTags] = useState<string[]>([]);
+
+  const toggleModal = () => setModalOpen((prev) => !prev);
 
   const addOuting = useCallback(
-    async ({ title = '', description = '' }) => {
-      if (!sheet) return;
+    async ({ title = '', description = '', tags = '' }) => {
+      if (!sheet) return false;
 
       const newRow = await sheet.addRow(
-        { title, description },
+        { title, description, tags },
         { insert: true, raw: true }
       );
+
       if (newRow) {
         setRows((prev) => [...prev, newRow]);
+        if (tags.length) {
+          const all: string[] = [...allTags, ...tags.split('|')];
+          setAllTags(Array.from(new Set(all)).sort());
+        }
       } else {
         console.error(newRow, 'problem adding row');
       }
+
+      return !!newRow;
     },
-    [sheet]
+    [sheet, allTags]
   );
 
   const deleteOuting = useCallback(
     async (rowNumber: number) => {
       if (!rows) return;
 
-      const row = rows.find(row => row._rowNumber === rowNumber);
+      const row = rows.find((row) => row._rowNumber === rowNumber);
       if (!row) {
         console.error('Row not found');
         return;
       }
-      
+
       row.disabled = 1; // update a value
       row.save(); // save updates
-      setRows(prev => [...prev.filter(r => r._rowNumber !== rowNumber)]);
+      setRows((prev) => [...prev.filter((r) => r._rowNumber !== rowNumber)]);
       // await rows[rowIdx].delete(); // delete a row
     },
     [rows]
@@ -112,13 +131,33 @@ export const OutingsProvider = ({ children }: { children: ReactNode }) => {
     if (!sheet) return;
 
     sheet.getRows().then((rows) => {
+      // Get the total tags
+      let theTags: string[] = [];
+      rows.forEach(({ tags }) => {
+        if (!tags) return;
+
+        theTags = [...theTags, ...tags.split('|')];
+      });
+      setAllTags(Array.from(new Set(theTags)).sort());
+
+      // Get the row data
       setRows(rows || []);
       setLoading(false);
     });
   }, [sheet]);
 
   return (
-    <OutingsContext.Provider value={{ rows, addOuting, deleteOuting, loading }}>
+    <OutingsContext.Provider
+      value={{
+        rows,
+        addOuting,
+        deleteOuting,
+        loading,
+        modalOpen,
+        toggleModal,
+        allTags,
+      }}
+    >
       {children}
     </OutingsContext.Provider>
   );

@@ -1,0 +1,27 @@
+.inner {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--clr-base-background);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% - 3rem * 2);
+  border-radius: 0.8rem;
+  overflow: hidden;
+}
+
+.header {
+  height: 7.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--clr-background);
+  box-shadow: var(--shadow-secondary);
+}
+
+.header h3 {
+  font-weight: 400;
+  font-family: var(--font-base);
+  font-size: 2.2rem;
+}
