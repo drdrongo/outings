@@ -6,6 +6,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useAlertContext } from '@/providers/AlertProvider';
 import OutingForm, { Inputs } from '@/components/OutingForm';
 import { GoogleSpreadsheetRow } from 'google-spreadsheet';
+import { GoogleSpreadsheetRowDetailed } from '@/components/OutingListItem';
 
 type OutingDetails = { title: string; description?: string; mapUrl?: string; tags?: string };
 
@@ -20,7 +21,7 @@ const EditOuting = () => {
   const getOutingValues = (ot: GoogleSpreadsheetRow | undefined) => {
     if (!ot) return { title: '' };
 
-    const { title, description, mapUrl, tags } = ot as GoogleSpreadsheetRow & OutingDetails;
+    const { title, description, mapUrl, tags } = ot as GoogleSpreadsheetRowDetailed;
     return {
       title,
       description,

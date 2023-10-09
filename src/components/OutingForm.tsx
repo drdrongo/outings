@@ -115,9 +115,7 @@ const OutingForm = ({ onSubmit, form, tagsForAutocomplete, forEdit }: Props) => 
             id="tags"
             options={tagsForAutocomplete}
             // Workaround to avoid hiding by ios keyboard
-            onOpen={e =>
-              setTimeout(() => (e.target as HTMLElement).scrollIntoView({ behavior: 'instant', block: 'end' }), 200)
-            }
+            onOpen={e => setTimeout(() => (e.target as HTMLElement).scrollIntoView({ block: 'end' }), 200)}
             value={value?.split('|') || []}
             onChange={(_, data) => {
               onChange(data.map(item => (typeof item === 'string' ? item : item.title)).join('|'));

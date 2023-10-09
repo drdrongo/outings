@@ -1,10 +1,6 @@
 import { ReactNode, createContext, useCallback, useContext, useEffect, useState } from 'react';
-import {
-  GoogleSpreadsheet,
-  GoogleSpreadsheetRow,
-  GoogleSpreadsheetWorksheet,
-  ServiceAccountCredentials,
-} from 'google-spreadsheet';
+import { GoogleSpreadsheet, GoogleSpreadsheetWorksheet, ServiceAccountCredentials } from 'google-spreadsheet';
+import { GoogleSpreadsheetRowDetailed } from '@/components/OutingListItem';
 const { GoogleSpreadsheet: Spreadsheet } = require('google-spreadsheet');
 
 type OutingProps = {
@@ -14,8 +10,8 @@ type OutingProps = {
   mapUrl?: string;
 };
 interface OutingsContextType {
-  rows: GoogleSpreadsheetRow[];
-  getOuting: (id: number) => GoogleSpreadsheetRow | undefined;
+  rows: GoogleSpreadsheetRowDetailed[];
+  getOuting: (id: number) => GoogleSpreadsheetRowDetailed | undefined;
   addOuting: ({ title, description, tags, mapUrl }: OutingProps) => Promise<boolean>;
   updateOuting: (rowIdx: number, { title, description, tags, mapUrl }: OutingProps) => Promise<boolean>;
   loading: boolean;
@@ -37,7 +33,7 @@ export const OutingsContext = createContext<OutingsContextType>({
 export const OutingsProvider = ({ children }: { children: ReactNode }) => {
   const [doc, setDoc] = useState<GoogleSpreadsheet>();
   const [sheet, setSheet] = useState<GoogleSpreadsheetWorksheet>();
-  const [rows, setRows] = useState<GoogleSpreadsheetRow[]>([]);
+  const [rows, setRows] = useState<GoogleSpreadsheetRowDetailed[]>([]);
   const [loading, setLoading] = useState(false);
   const [allTags, setAllTags] = useState<string[]>([]);
 
@@ -89,7 +85,7 @@ export const OutingsProvider = ({ children }: { children: ReactNode }) => {
       const newRow = await sheet.addRow({ title, description, tags, mapUrl }, { insert: true, raw: true });
 
       if (newRow) {
-        setRows(prev => [...prev, newRow]);
+        setRows(prev => [...prev, newRow as GoogleSpreadsheetRowDetailed]);
         if (tags.length) {
           const all: string[] = [...allTags, ...tags.split('|')];
           setAllTags(Array.from(new Set(all)).sort());
@@ -162,7 +158,7 @@ export const OutingsProvider = ({ children }: { children: ReactNode }) => {
       setAllTags(Array.from(new Set(theTags)).sort());
 
       // Get the row data
-      setRows(rows || []);
+      setRows((rows as GoogleSpreadsheetRowDetailed[]) || []);
       setLoading(false);
     });
   }, [sheet]);

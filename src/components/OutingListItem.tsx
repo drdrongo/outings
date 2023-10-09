@@ -10,14 +10,16 @@ import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import PlaceIcon from '@mui/icons-material/Place';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
+export type GoogleSpreadsheetRowDetailed = GoogleSpreadsheetRow & {
+  title: string;
+  description?: string;
+  tags?: string;
+  mapUrl?: string;
+  _rowNumber: number;
+};
+
 interface Props {
-  row: GoogleSpreadsheetRow & {
-    title: string;
-    description?: string;
-    tags?: string;
-    mapUrl?: string;
-    _rowNumber: number;
-  };
+  row: GoogleSpreadsheetRowDetailed;
   open: boolean;
   setOpen: (num: number | null) => void;
   deleteRow: () => void;

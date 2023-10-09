@@ -1,10 +1,9 @@
-import { GoogleSpreadsheetRow } from 'google-spreadsheet';
 import styles from './OutingList.module.css';
-import OutingListItem from './OutingListItem';
+import OutingListItem, { GoogleSpreadsheetRowDetailed } from './OutingListItem';
 import { useState } from 'react';
 import { useOutingsContext } from '@/providers/OutingsProvider';
 
-const OutingList = ({ rows }: { rows: GoogleSpreadsheetRow[] }) => {
+const OutingList = ({ rows }: { rows: GoogleSpreadsheetRowDetailed[] }) => {
   const { deleteOuting } = useOutingsContext();
   const [openRowNumber, setOpenRowNumber] = useState<number | null>(null);
 
