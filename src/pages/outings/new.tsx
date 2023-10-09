@@ -43,7 +43,12 @@ const NewOuting = () => {
         <h3>New Outing</h3>
       </header>
 
-      <OutingForm form={form} onSubmit={form.handleSubmit(onSubmit)} tagsForAutocomplete={tagsForAutocomplete} />
+      <OutingForm
+        form={form}
+        onSubmit={form.handleSubmit(onSubmit)}
+        tagsForAutocomplete={tagsForAutocomplete}
+        forEdit={false}
+      />
     </main>
   );
 };

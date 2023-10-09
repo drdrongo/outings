@@ -20,9 +20,10 @@ type Props = {
     title: string;
   }[];
   onSubmit: (e?: BaseSyntheticEvent<object, any, any> | undefined) => Promise<void>;
+  forEdit: boolean;
 };
 
-const OutingForm = ({ onSubmit, form, tagsForAutocomplete }: Props) => {
+const OutingForm = ({ onSubmit, form, tagsForAutocomplete, forEdit }: Props) => {
   const {
     control,
     formState: { isValid },
@@ -95,7 +96,7 @@ const OutingForm = ({ onSubmit, form, tagsForAutocomplete }: Props) => {
             placeholder="Description"
             multiline
             className={styles.formItem}
-            minRows={5}
+            minRows={2}
             inputProps={{ style: { fontSize: 20, lineHeight: 1.5 } }} // font size of input text
             InputLabelProps={{ style: { fontSize: 20, lineHeight: 1.5 } }} // font size of input label
             variant="outlined"
@@ -115,7 +116,7 @@ const OutingForm = ({ onSubmit, form, tagsForAutocomplete }: Props) => {
             options={tagsForAutocomplete}
             // Workaround to avoid hiding by ios keyboard
             onOpen={e =>
-              setTimeout(() => (e.target as HTMLElement).scrollIntoView({ behavior: 'smooth', block: 'end' }), 100)
+              setTimeout(() => (e.target as HTMLElement).scrollIntoView({ behavior: 'instant', block: 'end' }), 200)
             }
             value={value?.split('|') || []}
             onChange={(_, data) => {
@@ -129,7 +130,7 @@ const OutingForm = ({ onSubmit, form, tagsForAutocomplete }: Props) => {
               const { title } = option;
               const color = stringToColor(title);
               return (
-                <span {...props} className={styles.autocompleteItem}>
+                <span style={{ backgroundColor: 'var(--clr-background' }} {...props}>
                   <span className={styles.autocompleteItemInner} style={{ borderColor: color, color }}>
                     {title}
                   </span>
@@ -142,17 +143,19 @@ const OutingForm = ({ onSubmit, form, tagsForAutocomplete }: Props) => {
         )}
       />
 
-      <Controller
-        name="continueAdding"
-        control={control}
-        render={({ field: { onChange, value } }) => (
-          <FormControlLabel
-            control={<Checkbox onChange={onChange} checked={!!value} style={{ transform: 'scale(1.4)' }} />}
-            label={<Typography className={styles.label}>Continue Creating Outings</Typography>}
-            className={styles.checkbox}
-          />
-        )}
-      />
+      {!forEdit && (
+        <Controller
+          name="continueAdding"
+          control={control}
+          render={({ field: { onChange, value } }) => (
+            <FormControlLabel
+              control={<Checkbox onChange={onChange} checked={!!value} style={{ transform: 'scale(1.4)' }} />}
+              label={<Typography className={styles.label}>Continue Creating Outings</Typography>}
+              className={styles.checkbox}
+            />
+          )}
+        />
+      )}
 
       <Button
         variant="contained"
@@ -163,7 +166,7 @@ const OutingForm = ({ onSubmit, form, tagsForAutocomplete }: Props) => {
         color="primary"
         disabled={!isValid}
       >
-        Create
+        {forEdit ? 'Update' : 'Create'}
       </Button>
     </form>
   );

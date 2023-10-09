@@ -15,7 +15,9 @@ type OutingProps = {
 };
 interface OutingsContextType {
   rows: GoogleSpreadsheetRow[];
+  getOuting: (id: number) => GoogleSpreadsheetRow | undefined;
   addOuting: ({ title, description, tags, mapUrl }: OutingProps) => Promise<boolean>;
+  updateOuting: (rowIdx: number, { title, description, tags, mapUrl }: OutingProps) => Promise<boolean>;
   loading: boolean;
   deleteOuting: (rowIdx: number) => void;
   allTags: string[];
@@ -24,7 +26,9 @@ interface OutingsContextType {
 // Default values for contacts context
 export const OutingsContext = createContext<OutingsContextType>({
   rows: [],
+  getOuting: (rowIdx: number) => undefined,
   addOuting: async () => false,
+  updateOuting: async () => false,
   loading: false,
   deleteOuting: (rowIdx: number) => {},
   allTags: [],
@@ -36,6 +40,47 @@ export const OutingsProvider = ({ children }: { children: ReactNode }) => {
   const [rows, setRows] = useState<GoogleSpreadsheetRow[]>([]);
   const [loading, setLoading] = useState(false);
   const [allTags, setAllTags] = useState<string[]>([]);
+
+  const getOuting = (idx: number) => rows.find(row => row._rowNumber === idx);
+
+  const updateOuting = useCallback(
+    async (rowIdx: number, { title, description = '', tags = '', mapUrl = '' }: OutingProps) => {
+      if (!sheet) {
+        return false;
+      }
+
+      const row = rows.find(row => row._rowNumber === rowIdx);
+      if (!row) {
+        return false;
+      }
+
+      // For some reson I have to do it like this; the .assign fn doesnt work.
+      row.title = title;
+      row.description = description;
+      row.tags = tags;
+      row.mapUrl = mapUrl;
+
+      // This doesn't return anything:
+      await row.save();
+
+      setRows(prev => {
+        return prev.map(prevRow => {
+          if (prevRow._rowNumber !== rowIdx) {
+            return prevRow;
+          }
+
+          return row;
+        });
+      });
+      if (tags.length) {
+        const all: string[] = [...allTags, ...tags.split('|')];
+        setAllTags(Array.from(new Set(all)).sort());
+      }
+
+      return true;
+    },
+    [sheet, allTags, rows]
+  );
 
   const addOuting = useCallback(
     async ({ title, description = '', tags = '', mapUrl = '' }: OutingProps) => {
@@ -126,8 +171,10 @@ export const OutingsProvider = ({ children }: { children: ReactNode }) => {
     <OutingsContext.Provider
       value={{
         rows,
+        getOuting,
         addOuting,
         deleteOuting,
+        updateOuting,
         loading,
         allTags,
       }}

@@ -31,11 +31,11 @@
   text-transform: capitalize;
 }
 .autocompleteItem {
-  backgroundcolor: var(--clr-background);
+  background-color: var(--clr-background);
 }
 .autocompleteItemInner {
   border-width: 1;
   border-style: solid;
   padding: 0.2rem 1rem;
-  borderradius: 2rem;
+  border-radius: 2rem;
 }
