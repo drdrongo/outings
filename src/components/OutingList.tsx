@@ -1,10 +1,10 @@
 import { GoogleSpreadsheetRow } from 'google-spreadsheet';
-import styles from './SwipeList.module.css';
-import SwipeListItem from './SwipeListItem';
+import styles from './OutingList.module.css';
+import OutingListItem from './OutingListItem';
 import { useState } from 'react';
 import { useOutingsContext } from '@/providers/OutingsProvider';
 
-const SwipeList = ({ rows }: { rows: GoogleSpreadsheetRow[] }) => {
+const OutingList = ({ rows }: { rows: GoogleSpreadsheetRow[] }) => {
   const { deleteOuting } = useOutingsContext();
   const [openRowNumber, setOpenRowNumber] = useState<number | null>(null);
 
@@ -12,7 +12,7 @@ const SwipeList = ({ rows }: { rows: GoogleSpreadsheetRow[] }) => {
     <ul className={styles.list}>
       {rows.map((row, idx) => {
         return (
-          <SwipeListItem
+          <OutingListItem
             key={row._rowNumber}
             idx={idx}
             row={row}
@@ -26,4 +26,4 @@ const SwipeList = ({ rows }: { rows: GoogleSpreadsheetRow[] }) => {
   );
 };
 
-export default SwipeList;
+export default OutingList;

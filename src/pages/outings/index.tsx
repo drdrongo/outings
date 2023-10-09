@@ -1,6 +1,6 @@
 import styles from '@/styles/Home.module.css';
 import { useOutingsContext } from '@/providers/OutingsProvider';
-import SwipeList from '@/components/SwipeList';
+import OutingList from '@/components/OutingList';
 
 interface Props {}
 
@@ -9,7 +9,7 @@ export default function Home({}: Props) {
 
   return (
     <main className={styles.main}>
-      <SwipeList rows={rows.filter(row => +row.disabled !== 1)} />
+      <OutingList rows={rows.filter(row => +row.disabled !== 1)} />
     </main>
   );
 }

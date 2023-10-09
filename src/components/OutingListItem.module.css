@@ -1,15 +1,12 @@
 .listItem {
-  /* min-height: 12rem; */
-  /* border-bottom: 1px solid grey; */
   display: flex;
   flex-direction: column;
   position: relative;
-  z-index: 1;
   overflow-x: hidden;
 
   background-color: var(--clr-background);
   margin: 0 0 0.2rem;
-  height: 11rem;
+  /* min-height: 11rem; */
   box-shadow: var(--shadow-primary);
 }
 
@@ -17,10 +14,11 @@
   background-color: var(--clr-background-2);
 }
 
-.listItem h3 {
+.rowContent h3 {
   font-size: 2rem;
   font-family: var(--font-base);
   font-weight: 500;
+  line-height: 1em;
 }
 
 .description {
@@ -29,9 +27,12 @@
   white-space: pre;
   text-overflow: ellipsis;
   overflow: hidden;
+  margin-top: 0.8rem;
+  line-height: 1.4em;
 }
 
 .tagBox {
+  margin-top: 1rem;
   display: flex;
   align-items: center;
 }
@@ -67,29 +68,56 @@
   justify-content: space-between;
 }
 
-.underlay {
+/* ---------------------- */
+
+.details {
+  max-height: 0;
+  overflow: hidden;
+  height: 6rem;
+  transition: max-height 0.2s;
   display: flex;
+  align-items: center;
   justify-content: flex-end;
-  flex: 0 0 30%;
+  border-top: 1px solid var(--clr-base-background);
+  padding: 0 1.6rem;
 }
 
-.underlay button {
-  flex-grow: 1;
+.expanded {
+  transition: max-height 0.2s;
+  max-height: 10rem;
+}
+
+svg.detailsIcon {
+  font-size: 3rem;
+}
+
+.navigate {
+  height: 5rem;
+  width: 5rem;
   outline: none;
   border: none;
+  background-color: transparent;
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.underlay button svg {
-  font-size: 3rem;
-  color: rgb(var(--foreground-rgb));
+.complete {
+  height: 5rem;
+  width: 5rem;
+  outline: none;
+  border: none;
+  background-color: transparent;
+  margin-right: 1.6rem;
+  color: #3da03d;
 }
 
 .delete {
-  background-color: rgba(200, 0, 0, 0.3);
+  outline: none;
+  border: none;
+  height: 5rem;
+  width: 5rem;
+  background-color: transparent;
+  color: #fe4a4a;
 }
-/* 
-@media (prefers-color-scheme: dark) {
-  .grey {
-    background-color: rgba(240, 240, 240, 0.1);
-  }
-} */
