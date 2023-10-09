@@ -1,20 +1,10 @@
 import { useOutingsContext } from '@/providers/OutingsProvider';
-import { Autocomplete, Button, Checkbox, FormControlLabel, TextField, Typography } from '@mui/material';
 import { useMemo } from 'react';
 import styles from '@/styles/NewOuting.module.css';
-import { Save } from '@mui/icons-material';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useAlertContext } from '@/providers/AlertProvider';
-import { stringToColor } from '@/utils/color';
 import { useRouter } from 'next/router';
-import OutingForm from '@/components/OutingForm';
-
-type Inputs = {
-  title: string;
-  description: string;
-  tags: string;
-  continueAdding?: boolean;
-};
+import OutingForm, { Inputs } from '@/components/OutingForm';
 
 const NewOuting = () => {
   const router = useRouter();
@@ -39,9 +29,10 @@ const NewOuting = () => {
     }
 
     if (continueAdding) {
+      // Stay on form
       form.reset();
     } else {
-      // Navigate away
+      // Navigate back to list
       router.push('/outings');
     }
   };

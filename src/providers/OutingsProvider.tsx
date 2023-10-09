@@ -1,11 +1,4 @@
-import {
-  ReactNode,
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import { ReactNode, createContext, useCallback, useContext, useEffect, useState } from 'react';
 import {
   GoogleSpreadsheet,
   GoogleSpreadsheetRow,
@@ -14,21 +7,17 @@ import {
 } from 'google-spreadsheet';
 const { GoogleSpreadsheet: Spreadsheet } = require('google-spreadsheet');
 
+type OutingProps = {
+  title: string;
+  description?: string;
+  tags?: string;
+  mapUrl?: string;
+};
 interface OutingsContextType {
   rows: GoogleSpreadsheetRow[];
-  addOuting: ({
-    title,
-    description,
-    tags,
-  }: {
-    title?: string | undefined;
-    description?: string | undefined;
-    tags?: string | undefined;
-  }) => Promise<boolean>;
+  addOuting: ({ title, description, tags, mapUrl }: OutingProps) => Promise<boolean>;
   loading: boolean;
   deleteOuting: (rowIdx: number) => void;
-  modalOpen: boolean;
-  toggleModal: () => void;
   allTags: string[];
 }
 
@@ -38,8 +27,6 @@ export const OutingsContext = createContext<OutingsContextType>({
   addOuting: async () => false,
   loading: false,
   deleteOuting: (rowIdx: number) => {},
-  modalOpen: false,
-  toggleModal: () => {},
   allTags: [],
 });
 
@@ -48,22 +35,16 @@ export const OutingsProvider = ({ children }: { children: ReactNode }) => {
   const [sheet, setSheet] = useState<GoogleSpreadsheetWorksheet>();
   const [rows, setRows] = useState<GoogleSpreadsheetRow[]>([]);
   const [loading, setLoading] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
   const [allTags, setAllTags] = useState<string[]>([]);
 
-  const toggleModal = () => setModalOpen((prev) => !prev);
-
   const addOuting = useCallback(
-    async ({ title = '', description = '', tags = '' }) => {
+    async ({ title, description = '', tags = '', mapUrl = '' }: OutingProps) => {
       if (!sheet) return false;
 
-      const newRow = await sheet.addRow(
-        { title, description, tags },
-        { insert: true, raw: true }
-      );
+      const newRow = await sheet.addRow({ title, description, tags, mapUrl }, { insert: true, raw: true });
 
       if (newRow) {
-        setRows((prev) => [...prev, newRow]);
+        setRows(prev => [...prev, newRow]);
         if (tags.length) {
           const all: string[] = [...allTags, ...tags.split('|')];
           setAllTags(Array.from(new Set(all)).sort());
@@ -81,7 +62,7 @@ export const OutingsProvider = ({ children }: { children: ReactNode }) => {
     async (rowNumber: number) => {
       if (!rows) return;
 
-      const row = rows.find((row) => row._rowNumber === rowNumber);
+      const row = rows.find(row => row._rowNumber === rowNumber);
       if (!row) {
         console.error('Row not found');
         return;
@@ -89,7 +70,7 @@ export const OutingsProvider = ({ children }: { children: ReactNode }) => {
 
       row.disabled = 1; // update a value
       row.save(); // save updates
-      setRows((prev) => [...prev.filter((r) => r._rowNumber !== rowNumber)]);
+      setRows(prev => [...prev.filter(r => r._rowNumber !== rowNumber)]);
       // await rows[rowIdx].delete(); // delete a row
     },
     [rows]
@@ -97,10 +78,7 @@ export const OutingsProvider = ({ children }: { children: ReactNode }) => {
 
   // Gets doc
   useEffect(() => {
-    if (
-      !process.env.NEXT_PUBLIC_CLIENT_EMAIL ||
-      !process.env.NEXT_PUBLIC_PRIVATE_KEY
-    ) {
+    if (!process.env.NEXT_PUBLIC_CLIENT_EMAIL || !process.env.NEXT_PUBLIC_PRIVATE_KEY) {
       console.error('MISSING API CREDENTIALS');
       return;
     }
@@ -112,9 +90,7 @@ export const OutingsProvider = ({ children }: { children: ReactNode }) => {
 
     (async () => {
       setLoading(true);
-      const doc: GoogleSpreadsheet = new Spreadsheet(
-        process.env.NEXT_PUBLIC_GOOGLE_SHEET_ID
-      );
+      const doc: GoogleSpreadsheet = new Spreadsheet(process.env.NEXT_PUBLIC_GOOGLE_SHEET_ID);
       await doc.useServiceAccountAuth(creds);
       await doc.loadInfo();
       setDoc(doc);
@@ -130,7 +106,7 @@ export const OutingsProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     if (!sheet) return;
 
-    sheet.getRows().then((rows) => {
+    sheet.getRows().then(rows => {
       // Get the total tags
       let theTags: string[] = [];
       rows.forEach(({ tags }) => {
@@ -153,8 +129,6 @@ export const OutingsProvider = ({ children }: { children: ReactNode }) => {
         addOuting,
         deleteOuting,
         loading,
-        modalOpen,
-        toggleModal,
         allTags,
       }}
     >

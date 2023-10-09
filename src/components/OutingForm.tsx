@@ -1,13 +1,15 @@
-import { Autocomplete, Button, Checkbox, FormControlLabel, TextField, Typography } from '@mui/material';
+import { Autocomplete, Button, Checkbox, FormControlLabel, IconButton, TextField, Typography } from '@mui/material';
 import styles from './OutingForm.module.css';
-import { Save } from '@mui/icons-material';
+import { Cancel, Save } from '@mui/icons-material';
 import { Controller, UseFormReturn } from 'react-hook-form';
 import { stringToColor } from '@/utils/color';
 import { BaseSyntheticEvent } from 'react';
+import { urlRegex } from '@/utils/regex';
 
-type Inputs = {
+export type Inputs = {
   title: string;
   description: string;
+  mapUrl: string;
   tags: string;
   continueAdding?: boolean;
 };
@@ -24,6 +26,7 @@ const OutingForm = ({ onSubmit, form, tagsForAutocomplete }: Props) => {
   const {
     control,
     formState: { isValid },
+    resetField,
   } = form;
 
   return (
@@ -37,12 +40,46 @@ const OutingForm = ({ onSubmit, form, tagsForAutocomplete }: Props) => {
             id="title"
             value={value || ''} // add a default empty string if value is undefined
             onChange={onChange}
-            placeholder="Outing Title"
+            placeholder="Title (required)"
             className={styles.formItem}
             inputProps={{ style: { fontSize: 20, lineHeight: 1.5 } }} // font size of input text
             InputLabelProps={{ style: { fontSize: 20, lineHeight: 1.5 } }} // font size of input label
             variant="outlined"
-            label={<Typography className={styles.label}>Title</Typography>}
+            label={<Typography className={styles.label}>Title (required)</Typography>}
+            InputProps={{
+              endAdornment: (
+                <IconButton sx={{ visibility: value ? 'visible' : 'hidden' }} onClick={() => resetField('title')}>
+                  <Cancel htmlColor="var(--clr-foreground)" />
+                </IconButton>
+              ),
+            }}
+          />
+        )}
+      />
+
+      <Controller
+        name="mapUrl"
+        control={control}
+        rules={{ pattern: urlRegex }}
+        render={({ field: { onChange, value } }) => (
+          <TextField
+            id="mapUrl"
+            value={value || ''} // add a default empty string if value is undefined
+            onChange={onChange}
+            placeholder="Map URL"
+            type="url"
+            className={styles.formItem}
+            inputProps={{ style: { fontSize: 20, lineHeight: 1.5 } }} // font size of input text
+            InputLabelProps={{ style: { fontSize: 20, lineHeight: 1.5 } }} // font size of input label
+            variant="outlined"
+            label={<Typography className={styles.label}>Map URL</Typography>}
+            InputProps={{
+              endAdornment: (
+                <IconButton sx={{ visibility: value ? 'visible' : 'hidden' }} onClick={() => resetField('mapUrl')}>
+                  <Cancel htmlColor="var(--clr-foreground)" />
+                </IconButton>
+              ),
+            }}
           />
         )}
       />
@@ -50,13 +87,12 @@ const OutingForm = ({ onSubmit, form, tagsForAutocomplete }: Props) => {
       <Controller
         name="description"
         control={control}
-        rules={{ required: true }}
         render={({ field: { onChange, value } }) => (
           <TextField
             id="description"
             value={value || ''} // add a default empty string if value is undefined
             onChange={onChange}
-            placeholder="Outing Description"
+            placeholder="Description"
             multiline
             className={styles.formItem}
             minRows={5}

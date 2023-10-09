@@ -19,6 +19,18 @@
   font-family: var(--font-base);
   font-weight: 500;
   line-height: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chevron {
+  transition: transform 0.1s;
+  transform: rotate(-90deg);
+}
+.chevronOpen {
+  transition: transform 0.1s;
+  transform: rotate(90deg);
 }
 
 .description {
@@ -80,6 +92,7 @@
   justify-content: flex-end;
   border-top: 1px solid var(--clr-base-background);
   padding: 0 1.6rem;
+  gap: 1.6rem;
 }
 
 .expanded {
@@ -87,37 +100,33 @@
   max-height: 10rem;
 }
 
-svg.detailsIcon {
-  font-size: 3rem;
-}
-
-.navigate {
+.detailsButton {
   height: 5rem;
   width: 5rem;
   outline: none;
   border: none;
   background-color: transparent;
-  margin-right: auto;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
+svg.detailsIcon {
+  font-size: 3rem;
+}
+
+.navigate {
+}
+
+.mapUrl {
+  color: #4285f4;
+}
+
 .complete {
-  height: 5rem;
-  width: 5rem;
-  outline: none;
-  border: none;
-  background-color: transparent;
-  margin-right: 1.6rem;
+  margin-left: auto;
   color: #3da03d;
 }
 
 .delete {
-  outline: none;
-  border: none;
-  height: 5rem;
-  width: 5rem;
-  background-color: transparent;
   color: #fe4a4a;
 }

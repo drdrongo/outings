@@ -7,9 +7,17 @@ import { stringToColor } from '@/utils/color';
 import Link from 'next/link';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import PlaceIcon from '@mui/icons-material/Place';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 interface Props {
-  row: GoogleSpreadsheetRow;
+  row: GoogleSpreadsheetRow & {
+    title: string;
+    description?: string;
+    tags?: string;
+    mapUrl?: string;
+    _rowNumber: number;
+  };
   open: boolean;
   setOpen: (num: number | null) => void;
   deleteRow: () => void;
@@ -17,7 +25,6 @@ interface Props {
 }
 
 const OutingListItem = ({ row, deleteRow, idx }: Props) => {
-  console.log(row);
   const [open, setOpen] = useState(false);
   const expandItem = () => {
     setOpen(prev => !prev);
@@ -38,9 +45,11 @@ const OutingListItem = ({ row, deleteRow, idx }: Props) => {
   return (
     <li key={row._rowNumber} className={styles.listItem} onClick={expandItem}>
       <div className={styles.rowContent}>
-        <h3>{row.title}</h3>
+        <h3>
+          <span>{row.title}</span>
+          <ChevronRightIcon className={clsx([styles.chevron, open && styles.chevronOpen])} />
+        </h3>
         <p className={styles.description}>{row.description}</p>
-
         {row.tags && (
           <div className={styles.tagBox}>
             {row.tags?.split('|')?.map((tag: string) => {
@@ -56,15 +65,25 @@ const OutingListItem = ({ row, deleteRow, idx }: Props) => {
       </div>
 
       <div onClick={e => e.stopPropagation()} className={clsx(styles.details, open ? styles.expanded : undefined)}>
-        <Link className={styles.navigate} href={`outings/${row._rowNumber}`} onClick={e => e.stopPropagation()}>
+        <Link
+          className={clsx([styles.detailsButton, styles.navigate])}
+          href={`outings/${row._rowNumber}`}
+          onClick={e => e.stopPropagation()}
+        >
           <OpenInNewIcon className={styles.detailsIcon} />
         </Link>
 
-        <button className={styles.complete} onClick={handleComplete}>
+        {row.mapUrl && (
+          <a href={row.mapUrl} target="_blank" className={clsx([styles.detailsButton, styles.mapUrl])}>
+            <PlaceIcon className={styles.detailsIcon} />
+          </a>
+        )}
+
+        <button className={clsx([styles.detailsButton, styles.complete])} onClick={handleComplete}>
           <CheckCircleOutlineIcon className={styles.detailsIcon} />
         </button>
 
-        <button className={styles.delete} onClick={handleDelete}>
+        <button className={clsx([styles.detailsButton, styles.delete])} onClick={handleDelete}>
           <Delete className={styles.detailsIcon} />
         </button>
       </div>
