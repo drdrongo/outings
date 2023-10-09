@@ -8,9 +8,13 @@
   overflow-x: hidden;
 
   background-color: var(--clr-background);
-  margin: 0 2.2rem 1rem;
+  margin: 0 0 0.2rem;
   height: 11rem;
   box-shadow: var(--shadow-primary);
+}
+
+.listItem:nth-child(2n) {
+  background-color: var(--clr-background-2);
 }
 
 .listItem h3 {
@@ -26,7 +30,6 @@
   text-overflow: ellipsis;
   overflow: hidden;
 }
-
 
 .tagBox {
   display: flex;

@@ -60,11 +60,7 @@ const SwipeListItem = ({ row, open, setOpen, deleteRow, idx }: Props) => {
             {row.tags?.split('|')?.map((tag: string) => {
               const color = stringToColor(tag);
               return (
-                <span
-                  key={tag}
-                  className={styles.tag}
-                  style={{ borderColor: color, color }}
-                >
+                <span key={tag} className={styles.tag} style={{ borderColor: color, color }}>
                   {tag}
                 </span>
               );

@@ -1,55 +1,55 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;400;500;800&display=swap');
 
 :root {
-  --font-base: "Inter", "Roboto", "Oxygen", arial, sans-serif;
+  --font-base: 'Inter', 'Roboto', 'Oxygen', arial, sans-serif;
 
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 242, 242, 242;
   --background-end-rgb: 255, 255, 255;
 
   /* ------ */
-  --clr-base-background: #FAF9FF;
-  --clr-background: #FFFFFF;
-  --clr-foreground: #504D6E;
+  --clr-base-background: #faf9ff;
+  --clr-background: #ffffff;
+  --clr-background-2: #dddddd;
+  --clr-foreground: #504d6e;
 
-  --clr-primary: #BECBF9;
-  --clr-primary-dark: #A7B8F6;
-  --clr-primary-light: #ECEFFD;
+  --clr-primary: #becbf9;
+  --clr-primary-dark: #a7b8f6;
+  --clr-primary-light: #eceffd;
 
-  --clr-secondary: #FD9D9B;
-  --clr-secondary-dark: #FC817F;
-  --clr-secondary-light: #FEE2E1;
+  --clr-secondary: #fd9d9b;
+  --clr-secondary-dark: #fc817f;
+  --clr-secondary-light: #fee2e1;
 
   /* offset-x | offset-y | blur-radius | spread-radius | color */
   --shadow-primary: 0 8px 16px 5px hsla(227, 83%, 86%, 0.28);
   --shadow-secondary: 0 4px 12px 3px hsla(240, 58%, 63%, 0.133);
 
-  --clr-button-background: linear-gradient(45deg, #B1C3FF, #E0E7FF);
+  --clr-button-background: linear-gradient(45deg, #b1c3ff, #e0e7ff);
 }
-
 
 /* @media (prefers-color-scheme: dark) { */
 :root.dark {
   color-scheme: dark;
 
   --clr-base-background: #515151;
-  --clr-background: #3E3D3D;
-  --clr-foreground: #FFFFFF;
+  --clr-background: #3e3d3d;
+  --clr-background-2: #2e2d2d;
+  --clr-foreground: #ffffff;
 
-  --clr-primary: #BECBF9;
-  --clr-primary-dark: #A7B8F6;
-  --clr-primary-light: #ECEFFD;
+  --clr-primary: #becbf9;
+  --clr-primary-dark: #a7b8f6;
+  --clr-primary-light: #eceffd;
 
-  --clr-secondary: #FD9D9B;
-  --clr-secondary-dark: #FC817F;
-  --clr-secondary-light: #FEE2E1;
+  --clr-secondary: #fd9d9b;
+  --clr-secondary-dark: #fc817f;
+  --clr-secondary-light: #fee2e1;
 
   /* offset-x | offset-y | blur-radius | spread-radius | color */
   --shadow-primary: 0 8px 16px 5px hsla(227, 83%, 86%, 0.28);
   --shadow-secondary: 0 4px 12px 3px hsla(240, 58%, 63%, 0.133);
 
   --clr-button-background: linear-gradient(100deg, #585295, #3b5472);
-
 }
 
 @media (prefers-color-scheme: dark) {
@@ -95,7 +95,6 @@ a {
   color: inherit;
   text-decoration: none;
 }
-
 
 #__next {
   height: 100%;

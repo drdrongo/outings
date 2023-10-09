@@ -1,8 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import {
-  GoogleSpreadsheet,
-  ServiceAccountCredentials,
-} from 'google-spreadsheet';
+import { GoogleSpreadsheet, ServiceAccountCredentials } from 'google-spreadsheet';
 import { stringify } from 'flatted';
 
 const { GoogleSpreadsheet: Spreadsheet } = require('google-spreadsheet');
@@ -31,7 +28,7 @@ export const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     sheetCount: doc.sheetCount,
     spreadsheetId: doc.spreadsheetId,
     // sheet,
-    rows
+    rows,
   };
   res.status(200).json({ docData });
 };

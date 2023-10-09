@@ -9,6 +9,13 @@
   width: 100%;
 }
 
+.header {
+  height: 7.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .formControl {
   margin-bottom: 2rem;
 }
@@ -26,15 +33,17 @@
 
 .checkbox {
   padding-left: 0.5rem;
+  margin-top: 1.4rem;
 }
 
-.checkboxLabel {
+.label {
   font-size: 1.5rem;
+  color: var(--clr-foreground);
 }
 
 .save {
   width: 100%;
-  margin-top: 2rem;
+  margin-top: 1.4rem;
   font-size: 2.2rem;
   color: var(--clr-background);
   text-transform: capitalize;

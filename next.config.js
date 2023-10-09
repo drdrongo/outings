@@ -2,11 +2,11 @@
 
 // const withPWA = require("next-pwa");
 
-const withPWA = require("next-pwa")({
-  dest: "public",
+const withPWA = require('next-pwa')({
+  dest: 'public',
   register: true,
   skipWaiting: true,
-  disable: process.env.NODE_ENV === "development",
+  disable: process.env.NODE_ENV === 'development',
 });
 
 const nextConfig = withPWA({
@@ -20,6 +20,17 @@ const nextConfig = withPWA({
     }
 
     return config;
+  },
+
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/outings',
+        // permanent: process.env.NODE_ENV !== 'development',
+        permanent: false,
+      },
+    ];
   },
 });
 
