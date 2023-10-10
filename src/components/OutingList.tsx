@@ -1,23 +1,20 @@
 import styles from './OutingList.module.css';
-import OutingListItem, { GoogleSpreadsheetRowDetailed } from './OutingListItem';
-import { useState } from 'react';
+import OutingListItem from './OutingListItem';
 import { useOutingsContext } from '@/providers/OutingsProvider';
+import { GoogleSpreadsheetRow } from 'google-spreadsheet';
+import { OutingsRowData } from '@/types/outings';
 
-const OutingList = ({ rows }: { rows: GoogleSpreadsheetRowDetailed[] }) => {
+const OutingList = ({ rows }: { rows: GoogleSpreadsheetRow<OutingsRowData>[] }) => {
   const { deleteOuting } = useOutingsContext();
-  const [openRowNumber, setOpenRowNumber] = useState<number | null>(null);
 
   return (
     <ul className={styles.list}>
       {rows.map((row, idx) => {
         return (
           <OutingListItem
-            key={row._rowNumber}
-            idx={idx}
+            key={row.get('uuid')}
             row={row}
-            open={+row._rowNumber === openRowNumber}
-            setOpen={(num: number | null) => setOpenRowNumber(num)}
-            deleteRow={() => deleteOuting(row._rowNumber)}
+            deleteRow={() => deleteOuting(row.get('uuid'))}
           />
         );
       })}

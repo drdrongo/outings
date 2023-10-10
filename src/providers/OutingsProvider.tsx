@@ -1,7 +1,15 @@
-import { ReactNode, createContext, useCallback, useContext, useEffect, useState } from 'react';
-import { GoogleSpreadsheet, GoogleSpreadsheetWorksheet, ServiceAccountCredentials } from 'google-spreadsheet';
-import { GoogleSpreadsheetRowDetailed } from '@/components/OutingListItem';
-const { GoogleSpreadsheet: Spreadsheet } = require('google-spreadsheet');
+import {
+  ReactNode,
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import { GoogleSpreadsheetRow, GoogleSpreadsheetWorksheet } from 'google-spreadsheet';
+import { OutingsRowData } from '@/types/outings';
+import { loadAuth, loadDoc, loadRows, loadSheet } from '@/utils/googleSpreadsheet';
+import { uuid } from '@/utils/uuid';
 
 type OutingProps = {
   title: string;
@@ -9,159 +17,159 @@ type OutingProps = {
   tags?: string;
   mapUrl?: string;
 };
+
 interface OutingsContextType {
-  rows: GoogleSpreadsheetRowDetailed[];
-  getOuting: (id: number) => GoogleSpreadsheetRowDetailed | undefined;
-  addOuting: ({ title, description, tags, mapUrl }: OutingProps) => Promise<boolean>;
-  updateOuting: (rowIdx: number, { title, description, tags, mapUrl }: OutingProps) => Promise<boolean>;
-  loading: boolean;
-  deleteOuting: (rowIdx: number) => void;
   allTags: string[];
+  rows: GoogleSpreadsheetRow<OutingsRowData>[];
+  loading: boolean;
+  getOuting: (uuid: string) => GoogleSpreadsheetRow<OutingsRowData> | undefined;
+  addOuting: ({ title, description, tags, mapUrl }: OutingProps) => Promise<boolean>;
+  updateOuting: (
+    uuid: string,
+    { title, description, tags, mapUrl }: OutingProps
+  ) => Promise<boolean>;
+  deleteOuting: (uuid: string) => void;
 }
 
 // Default values for contacts context
 export const OutingsContext = createContext<OutingsContextType>({
   rows: [],
-  getOuting: (rowIdx: number) => undefined,
+  allTags: [],
+  loading: false,
+  getOuting: () => undefined,
   addOuting: async () => false,
   updateOuting: async () => false,
-  loading: false,
-  deleteOuting: (rowIdx: number) => {},
-  allTags: [],
+  deleteOuting: () => {},
 });
 
 export const OutingsProvider = ({ children }: { children: ReactNode }) => {
-  const [doc, setDoc] = useState<GoogleSpreadsheet>();
   const [sheet, setSheet] = useState<GoogleSpreadsheetWorksheet>();
-  const [rows, setRows] = useState<GoogleSpreadsheetRowDetailed[]>([]);
+  const [rows, setRows] = useState<GoogleSpreadsheetRow<OutingsRowData>[]>([]);
   const [loading, setLoading] = useState(false);
   const [allTags, setAllTags] = useState<string[]>([]);
 
-  const getOuting = (idx: number) => rows.find(row => row._rowNumber === idx);
+  const getOuting = (uuid: string) => rows.find(row => row.get('uuid') === uuid);
 
   const updateOuting = useCallback(
-    async (rowIdx: number, { title, description = '', tags = '', mapUrl = '' }: OutingProps) => {
-      if (!sheet) {
-        return false;
-      }
-
-      const row = rows.find(row => row._rowNumber === rowIdx);
+    async (
+      uuid: string,
+      { title, description = '', tags = '', mapUrl = '' }: OutingProps
+    ) => {
+      const row = rows.find(row => row.get('uuid') === uuid);
       if (!row) {
         return false;
       }
 
       // For some reson I have to do it like this; the .assign fn doesnt work.
-      row.title = title;
-      row.description = description;
-      row.tags = tags;
-      row.mapUrl = mapUrl;
+      row.assign({
+        uuid,
+        title,
+        description,
+        tags,
+        mapUrl,
+      });
 
       // This doesn't return anything:
       await row.save();
 
-      setRows(prev => {
-        return prev.map(prevRow => {
-          if (prevRow._rowNumber !== rowIdx) {
-            return prevRow;
-          }
-
-          return row;
-        });
-      });
-      if (tags.length) {
-        const all: string[] = [...allTags, ...tags.split('|')];
-        setAllTags(Array.from(new Set(all)).sort());
-      }
+      // Update the client state
+      setRows(prev =>
+        prev.map(prevRow => (prevRow.get('uuid') !== uuid ? prevRow : row))
+      );
 
       return true;
     },
-    [sheet, allTags, rows]
+    [rows]
   );
 
   const addOuting = useCallback(
     async ({ title, description = '', tags = '', mapUrl = '' }: OutingProps) => {
       if (!sheet) return false;
 
-      const newRow = await sheet.addRow({ title, description, tags, mapUrl }, { insert: true, raw: true });
+      const newRowValues: OutingsRowData = {
+        uuid: uuid(),
+        title,
+        description,
+        tags,
+        mapUrl,
+      };
+
+      // The following is a little risky but I have to do it, since addRow doesn't take user-types
+      const newRow = (await sheet.addRow(newRowValues, {
+        insert: true,
+        raw: true,
+      })) as GoogleSpreadsheetRow<OutingsRowData>;
 
       if (newRow) {
-        setRows(prev => [...prev, newRow as GoogleSpreadsheetRowDetailed]);
-        if (tags.length) {
-          const all: string[] = [...allTags, ...tags.split('|')];
-          setAllTags(Array.from(new Set(all)).sort());
-        }
+        setRows(prev => [...prev, newRow]);
       } else {
         console.error(newRow, 'problem adding row');
       }
-
       return !!newRow;
     },
-    [sheet, allTags]
+    [sheet]
   );
 
   const deleteOuting = useCallback(
-    async (rowNumber: number) => {
+    async (uuid: string) => {
       if (!rows) return;
 
-      const row = rows.find(row => row._rowNumber === rowNumber);
+      const row = rows.find(row => row.get('uuid') === uuid);
       if (!row) {
         console.error('Row not found');
         return;
       }
 
-      row.disabled = 1; // update a value
+      row.set('disabled', 1); // update a value
       row.save(); // save updates
-      setRows(prev => [...prev.filter(r => r._rowNumber !== rowNumber)]);
-      // await rows[rowIdx].delete(); // delete a row
+      setRows(prev =>
+        prev.map(prevRow => (prevRow.get('uuid') !== uuid ? prevRow : row))
+      );
     },
     [rows]
   );
 
   // Gets doc
   useEffect(() => {
-    if (!process.env.NEXT_PUBLIC_CLIENT_EMAIL || !process.env.NEXT_PUBLIC_PRIVATE_KEY) {
-      console.error('MISSING API CREDENTIALS');
-      return;
-    }
-
-    const creds: ServiceAccountCredentials = {
-      client_email: process.env.NEXT_PUBLIC_CLIENT_EMAIL,
-      private_key: process.env.NEXT_PUBLIC_PRIVATE_KEY.replace(/\\n/gm, '\n'),
-    };
-
     (async () => {
       setLoading(true);
-      const doc: GoogleSpreadsheet = new Spreadsheet(process.env.NEXT_PUBLIC_GOOGLE_SHEET_ID);
-      await doc.useServiceAccountAuth(creds);
-      await doc.loadInfo();
-      setDoc(doc);
+      if (
+        !process.env.NEXT_PUBLIC_CLIENT_EMAIL ||
+        !process.env.NEXT_PUBLIC_PRIVATE_KEY ||
+        !process.env.NEXT_PUBLIC_GOOGLE_SHEET_ID
+      ) {
+        setLoading(false);
+        console.error('MISSING API CREDENTIALS');
+        return;
+      }
+      const jwt = loadAuth();
+      const doc = await loadDoc(process.env.NEXT_PUBLIC_GOOGLE_SHEET_ID, jwt);
+      if (!doc) {
+        setLoading(false);
+        console.error('doc not found');
+        return;
+      }
+
+      const sheet = loadSheet(doc);
+      setSheet(sheet);
+
+      const rows = await loadRows(sheet);
+      setRows(rows);
+
+      setLoading(false);
     })();
   }, []);
 
-  // Gets sheets
   useEffect(() => {
-    if (doc) setSheet(doc.sheetsByIndex[0]);
-  }, [doc]);
+    let theTags: string[] = [];
+    rows.forEach(row => {
+      const tags = row.get('tags');
+      if (!tags) return;
 
-  // Gets rows
-  useEffect(() => {
-    if (!sheet) return;
-
-    sheet.getRows().then(rows => {
-      // Get the total tags
-      let theTags: string[] = [];
-      rows.forEach(({ tags }) => {
-        if (!tags) return;
-
-        theTags = [...theTags, ...tags.split('|')];
-      });
-      setAllTags(Array.from(new Set(theTags)).sort());
-
-      // Get the row data
-      setRows((rows as GoogleSpreadsheetRowDetailed[]) || []);
-      setLoading(false);
+      theTags = [...theTags, ...tags.split('|')];
     });
-  }, [sheet]);
+    setAllTags(Array.from(new Set(theTags)).sort());
+  }, [rows]);
 
   return (
     <OutingsContext.Provider

@@ -9,7 +9,7 @@ export default function Home({}: Props) {
 
   return (
     <main className={styles.main}>
-      <OutingList rows={rows.filter(row => +row.disabled !== 1)} />
+      <OutingList rows={rows.filter(row => +row.get('disabled') !== 1)} />
     </main>
   );
 }

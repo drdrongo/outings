@@ -5,10 +5,6 @@ import styles from '@/styles/EditOuting.module.css';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useAlertContext } from '@/providers/AlertProvider';
 import OutingForm, { Inputs } from '@/components/OutingForm';
-import { GoogleSpreadsheetRow } from 'google-spreadsheet';
-import { GoogleSpreadsheetRowDetailed } from '@/components/OutingListItem';
-
-type OutingDetails = { title: string; description?: string; mapUrl?: string; tags?: string };
 
 const EditOuting = () => {
   const router = useRouter();
@@ -18,40 +14,43 @@ const EditOuting = () => {
   const { addAlert } = useAlertContext();
   const { updateOuting, allTags, getOuting } = useOutingsContext();
 
-  const getOutingValues = (ot: GoogleSpreadsheetRow | undefined) => {
-    if (!ot) return { title: '' };
+  const outing = useMemo(() => {
+    if (!id || Array.isArray(id)) {
+      return undefined;
+    }
 
-    const { title, description, mapUrl, tags } = ot as GoogleSpreadsheetRowDetailed;
-    return {
-      title,
-      description,
-      mapUrl,
-      tags,
-    };
-  };
-
-  const outing: OutingDetails = getOutingValues(getOuting(Number(id)));
-
-  const tagsForAutocomplete = useMemo(() => allTags.map(tag => ({ title: tag })), [allTags]);
+    return getOuting(id);
+  }, [id, getOuting]);
 
   const form = useForm<Inputs>({ mode: 'onChange' });
 
   const onSubmit: SubmitHandler<Inputs> = async data => {
-    const isOkay = await updateOuting(Number(id), data);
-    if (!isOkay) {
-      addAlert({ severity: 'error', label: 'Failed to Update Outing' });
+    if (!outing) {
+      console.error('Error while updating');
       return;
-    } else {
-      addAlert({ severity: 'success', label: 'Outing Updated' });
     }
 
-    // Navigate back to list
-    router.push('/outings');
+    const isOkay = await updateOuting(outing.get('uuid'), data);
+    if (!isOkay) {
+      addAlert({ severity: 'error', label: 'Failed to Update Outing' });
+    } else {
+      addAlert({ severity: 'success', label: 'Outing Updated' });
+      // Navigate back to list
+      router.push('/outings');
+    }
   };
 
   useEffect(() => {
-    form.reset(outing, { keepDefaultValues: true });
-  }, []);
+    form.reset(
+      {
+        title: outing?.get('title'),
+        description: outing?.get('description'),
+        mapUrl: outing?.get('mapUrl'),
+        tags: outing?.get('tags'),
+      },
+      { keepDefaultValues: true }
+    );
+  }, [outing]);
 
   return (
     <main className={styles.main}>
@@ -62,7 +61,7 @@ const EditOuting = () => {
       <OutingForm
         form={form}
         onSubmit={form.handleSubmit(onSubmit)}
-        tagsForAutocomplete={tagsForAutocomplete}
+        tags={allTags}
         forEdit={true}
       />
     </main>

@@ -1,4 +1,12 @@
-import { Autocomplete, Button, Checkbox, FormControlLabel, IconButton, TextField, Typography } from '@mui/material';
+import {
+  Autocomplete,
+  Button,
+  Checkbox,
+  FormControlLabel,
+  IconButton,
+  TextField,
+  Typography,
+} from '@mui/material';
 import styles from './OutingForm.module.css';
 import { Cancel, Save } from '@mui/icons-material';
 import { Controller, UseFormReturn } from 'react-hook-form';
@@ -16,14 +24,14 @@ export type Inputs = {
 
 type Props = {
   form: UseFormReturn<Inputs, any>;
-  tagsForAutocomplete: {
-    title: string;
-  }[];
+  tags: string[];
   onSubmit: (e?: BaseSyntheticEvent<object, any, any> | undefined) => Promise<void>;
   forEdit: boolean;
 };
 
-const OutingForm = ({ onSubmit, form, tagsForAutocomplete, forEdit }: Props) => {
+const OutingForm = ({ onSubmit, form, tags, forEdit }: Props) => {
+  const tagsForAutocomplete = tags.map(tag => ({ title: tag }));
+
   const {
     control,
     formState: { isValid },
@@ -49,7 +57,10 @@ const OutingForm = ({ onSubmit, form, tagsForAutocomplete, forEdit }: Props) => 
             label={<Typography className={styles.label}>Title (required)</Typography>}
             InputProps={{
               endAdornment: (
-                <IconButton sx={{ visibility: value ? 'visible' : 'hidden' }} onClick={() => resetField('title')}>
+                <IconButton
+                  sx={{ visibility: value ? 'visible' : 'hidden' }}
+                  onClick={() => resetField('title')}
+                >
                   <Cancel htmlColor="var(--clr-foreground)" />
                 </IconButton>
               ),
@@ -76,7 +87,10 @@ const OutingForm = ({ onSubmit, form, tagsForAutocomplete, forEdit }: Props) => 
             label={<Typography className={styles.label}>Map URL</Typography>}
             InputProps={{
               endAdornment: (
-                <IconButton sx={{ visibility: value ? 'visible' : 'hidden' }} onClick={() => resetField('mapUrl')}>
+                <IconButton
+                  sx={{ visibility: value ? 'visible' : 'hidden' }}
+                  onClick={() => resetField('mapUrl')}
+                >
                   <Cancel htmlColor="var(--clr-foreground)" />
                 </IconButton>
               ),
@@ -115,12 +129,21 @@ const OutingForm = ({ onSubmit, form, tagsForAutocomplete, forEdit }: Props) => 
             id="tags"
             options={tagsForAutocomplete}
             // Workaround to avoid hiding by ios keyboard
-            onOpen={e => setTimeout(() => (e.target as HTMLElement).scrollIntoView({ block: 'end' }), 200)}
+            onOpen={e =>
+              setTimeout(
+                () => (e.target as HTMLElement).scrollIntoView({ block: 'end' }),
+                200
+              )
+            }
             value={value?.split('|') || []}
             onChange={(_, data) => {
-              onChange(data.map(item => (typeof item === 'string' ? item : item.title)).join('|'));
+              onChange(
+                data.map(item => (typeof item === 'string' ? item : item.title)).join('|')
+              );
             }}
-            getOptionLabel={option => (typeof option === 'string' ? option : option.title)}
+            getOptionLabel={option =>
+              typeof option === 'string' ? option : option.title
+            }
             filterSelectedOptions
             renderInput={params => <TextField {...params} placeholder="Choose a tag" />}
             // Change style & color of each selectable option
@@ -129,14 +152,19 @@ const OutingForm = ({ onSubmit, form, tagsForAutocomplete, forEdit }: Props) => 
               const color = stringToColor(title);
               return (
                 <span style={{ backgroundColor: 'var(--clr-background' }} {...props}>
-                  <span className={styles.autocompleteItemInner} style={{ borderColor: color, color }}>
+                  <span
+                    className={styles.autocompleteItemInner}
+                    style={{ borderColor: color, color }}
+                  >
                     {title}
                   </span>
                 </span>
               );
             }}
             // Autocomplete list had visible white background
-            ListboxProps={{ sx: { backgroundColor: 'var(--clr-background)', paddingY: 0 } }}
+            ListboxProps={{
+              sx: { backgroundColor: 'var(--clr-background)', paddingY: 0 },
+            }}
           />
         )}
       />
@@ -147,8 +175,18 @@ const OutingForm = ({ onSubmit, form, tagsForAutocomplete, forEdit }: Props) => 
           control={control}
           render={({ field: { onChange, value } }) => (
             <FormControlLabel
-              control={<Checkbox onChange={onChange} checked={!!value} style={{ transform: 'scale(1.4)' }} />}
-              label={<Typography className={styles.label}>Continue Creating Outings</Typography>}
+              control={
+                <Checkbox
+                  onChange={onChange}
+                  checked={!!value}
+                  style={{ transform: 'scale(1.4)' }}
+                />
+              }
+              label={
+                <Typography className={styles.label}>
+                  Continue Creating Outings
+                </Typography>
+              }
               className={styles.checkbox}
             />
           )}

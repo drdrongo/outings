@@ -12,8 +12,6 @@ const NewOuting = () => {
   const { addAlert } = useAlertContext();
   const { addOuting, allTags } = useOutingsContext();
 
-  const tagsForAutocomplete = useMemo(() => allTags.map(tag => ({ title: tag })), [allTags]);
-
   const form = useForm<Inputs>({ mode: 'onChange' });
 
   const onSubmit: SubmitHandler<Inputs> = async data => {
@@ -46,7 +44,7 @@ const NewOuting = () => {
       <OutingForm
         form={form}
         onSubmit={form.handleSubmit(onSubmit)}
-        tagsForAutocomplete={tagsForAutocomplete}
+        tags={allTags}
         forEdit={false}
       />
     </main>
