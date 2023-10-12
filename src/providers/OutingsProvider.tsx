@@ -132,18 +132,19 @@ export const OutingsProvider = ({ children }: { children: ReactNode }) => {
   // Gets doc
   useEffect(() => {
     (async () => {
+      return;
       setLoading(true);
       if (
-        !process.env.NEXT_PUBLIC_CLIENT_EMAIL ||
-        !process.env.NEXT_PUBLIC_PRIVATE_KEY ||
-        !process.env.NEXT_PUBLIC_GOOGLE_SHEET_ID
+        !process.env.CLIENT_EMAIL ||
+        !process.env.PRIVATE_KEY ||
+        !process.env.GOOGLE_SHEET_ID
       ) {
         setLoading(false);
         console.error('MISSING API CREDENTIALS');
         return;
       }
       const jwt = loadAuth();
-      const doc = await loadDoc(process.env.NEXT_PUBLIC_GOOGLE_SHEET_ID, jwt);
+      const doc = await loadDoc(process.env.GOOGLE_SHEET_ID, jwt);
       if (!doc) {
         setLoading(false);
         console.error('doc not found');
