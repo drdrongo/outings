@@ -1,12 +1,12 @@
 {
   "name": "Outings",
   "short_name": "Outings",
-  "theme_color": "#FFF",
+  "theme_color": "#fd9d9b",
   "background_color": "#fff",
   "display": "standalone",
   "orientation": "portrait",
   "scope": "/",
-  "start_url": "/",
+  "start_url": "/outings",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
