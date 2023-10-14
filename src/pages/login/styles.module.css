@@ -1,0 +1,41 @@
+.formControl {
+  margin-bottom: 2rem;
+}
+
+.formLabel {
+  position: absolute;
+  top: -3.8rem;
+  left: -1.2rem;
+}
+
+.formItem {
+  width: 100%;
+  margin-bottom: 1.6rem;
+}
+
+.checkbox {
+  padding-left: 0.5rem;
+  margin-top: 1.4rem;
+}
+
+.label {
+  font-size: 1.5rem;
+  color: var(--clr-foreground);
+}
+
+.save {
+  width: 100%;
+  margin-top: 1.4rem;
+  font-size: 2.2rem;
+  color: var(--clr-background);
+  text-transform: capitalize;
+}
+.autocompleteItem {
+  background-color: var(--clr-background);
+}
+.autocompleteItemInner {
+  border-width: 1;
+  border-style: solid;
+  padding: 0.2rem 1rem;
+  border-radius: 2rem;
+}

@@ -1,12 +1,14 @@
-import { useRouter } from 'next/router';
-import { useOutingsContext } from '@/providers/OutingsProvider';
-import { useEffect, useMemo } from 'react';
-import styles from '@/styles/EditOuting.module.css';
+import { useEffect, useMemo, ReactElement } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
+import { useRouter } from 'next/router';
+import styles from '@/styles/EditOuting.module.css';
+import type { NextPageWithLayout } from '@/pages/_app';
+import { useOutingsContext } from '@/providers/OutingsProvider';
 import { useAlertContext } from '@/providers/AlertProvider';
 import OutingForm, { Inputs } from '@/components/OutingForm';
+import Layout from '@/components/Layout';
 
-const EditOuting = () => {
+const EditOuting: NextPageWithLayout = () => {
   const router = useRouter();
 
   const { id } = router.query;
@@ -66,6 +68,10 @@ const EditOuting = () => {
       />
     </main>
   );
+};
+
+EditOuting.getLayout = function getLayout(page: ReactElement) {
+  return <Layout>{page}</Layout>;
 };
 
 export default EditOuting;

@@ -1,12 +1,14 @@
 import { useOutingsContext } from '@/providers/OutingsProvider';
-import { useMemo } from 'react';
-import styles from '@/styles/NewOuting.module.css';
+import styles from './styles.module.css';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useAlertContext } from '@/providers/AlertProvider';
 import { useRouter } from 'next/router';
 import OutingForm, { Inputs } from '@/components/OutingForm';
+import type { ReactElement } from 'react';
+import type { NextPageWithLayout } from '@/pages/_app';
+import Layout from '@/components/Layout';
 
-const NewOuting = () => {
+const NewOuting: NextPageWithLayout = () => {
   const router = useRouter();
 
   const { addAlert } = useAlertContext();
@@ -49,6 +51,10 @@ const NewOuting = () => {
       />
     </main>
   );
+};
+
+NewOuting.getLayout = function getLayout(page: ReactElement) {
+  return <Layout>{page}</Layout>;
 };
 
 export default NewOuting;
