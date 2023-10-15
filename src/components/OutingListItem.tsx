@@ -1,4 +1,3 @@
-import { GoogleSpreadsheetRow } from 'google-spreadsheet';
 import { useState } from 'react';
 import styles from './OutingListItem.module.css';
 import clsx from 'clsx';
@@ -9,77 +8,75 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import PlaceIcon from '@mui/icons-material/Place';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import { OutingsRowData } from '@/types/outings';
+import { Outing } from '@/providers/OutingsProvider';
 
 interface Props {
-  row: GoogleSpreadsheetRow<OutingsRowData>;
+  row: Outing;
   deleteRow: () => void;
 }
 
 const OutingListItem = ({ row, deleteRow }: Props) => {
   const [open, setOpen] = useState(false);
+
   const expandItem = () => {
-    setOpen(prev => !prev);
+    setOpen((prev) => !prev);
   };
 
   const handleDelete = () => {
-    if (confirm(`Are you sure you want to delete ${row.get('title')}?`) == true) {
+    if (confirm(`Are you sure you want to delete ${row.name}?`) == true) {
       deleteRow();
     }
   };
 
   const handleComplete = () => {
-    if (confirm(`Mark ${row.get('title')} as complete?`) == true) {
+    if (confirm(`Mark ${row.name} as completed?`) == true) {
       deleteRow();
     }
   };
 
   return (
-    <li key={row.get('uuid')} className={styles.listItem} onClick={expandItem}>
+    <li className={styles.listItem} onClick={expandItem}>
       <div className={styles.rowContent}>
         <h3>
-          <span>{row.get('title')}</span>
+          <span>{row.name}</span>
           <ChevronRightIcon
             className={clsx([styles.chevron, open && styles.chevronOpen])}
           />
         </h3>
-        <p className={styles.description}>{row.get('description')}</p>
-        {row.get('tags') && (
+        <p className={styles.description}>{row.description}</p>
+        {row.tags?.length > 0 && (
           <div className={styles.tagBox}>
-            {row
-              .get('tags')
-              ?.split('|')
-              ?.map((tag: string) => {
-                const color = stringToColor(tag);
-                return (
-                  <span
-                    key={tag}
-                    className={styles.tag}
-                    style={{ borderColor: color, color }}
-                  >
-                    {tag}
-                  </span>
-                );
-              })}
+            {row.tags.map(({ id }) => {
+              const color = stringToColor(id);
+              return (
+                <span
+                  key={id}
+                  className={styles.tag}
+                  style={{ borderColor: color, color }}
+                >
+                  {id}
+                </span>
+              );
+            })}
           </div>
         )}
       </div>
 
       <div
-        onClick={e => e.stopPropagation()}
+        onClick={(e) => e.stopPropagation()}
         className={clsx(styles.details, open ? styles.expanded : undefined)}
       >
         <Link
           className={clsx([styles.detailsButton, styles.navigate])}
-          href={`outings/${row.get('uuid')}`}
-          onClick={e => e.stopPropagation()}
+          href={`outings/${row.id}`}
+          onClick={(e) => e.stopPropagation()}
         >
           <OpenInNewIcon className={styles.detailsIcon} />
         </Link>
 
-        {row.get('mapUrl') && (
+        {row.mapUrl.length > 0 && (
           <a
-            href={row.get('mapUrl')}
+            href={row.mapUrl}
             target="_blank"
             className={clsx([styles.detailsButton, styles.mapUrl])}
           >

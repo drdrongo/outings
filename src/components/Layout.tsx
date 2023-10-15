@@ -5,6 +5,8 @@ import clsx from 'clsx';
 import Head from 'next/head';
 import { useOutingsContext } from '@/providers/OutingsProvider';
 import { CircularProgress } from '@mui/material';
+import { useAuthContext } from '@/providers/AuthProvider';
+import { useRouter } from 'next/router';
 
 interface Props {
   children?: ReactNode;
@@ -13,7 +15,14 @@ interface Props {
 }
 
 export default function Layout({ children, className, title = 'Outings' }: Props) {
+  const router = useRouter();
   const { loading } = useOutingsContext();
+  const { currentUser } = useAuthContext();
+
+  if (!currentUser) {
+    router.push('/login');
+    return;
+  }
 
   return (
     <div className={styles.heroContainer}>

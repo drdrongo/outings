@@ -15,7 +15,7 @@ const Login = () => {
   const router = useRouter();
   const form = useForm<Inputs>({ mode: 'onChange' });
 
-  const { user, login } = useAuthContext();
+  const { currentUser, login } = useAuthContext();
 
   const {
     control,
@@ -26,7 +26,7 @@ const Login = () => {
     login(email, password);
   };
 
-  if (user) {
+  if (currentUser) {
     router.push('/outings');
     return;
   }

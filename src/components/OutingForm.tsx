@@ -15,10 +15,10 @@ import { BaseSyntheticEvent } from 'react';
 import { urlRegex } from '@/utils/regex';
 
 export type Inputs = {
-  title: string;
+  name: string;
   description: string;
   mapUrl: string;
-  tags: string;
+  tags: string[];
   continueAdding?: boolean;
 };
 
@@ -30,8 +30,6 @@ type Props = {
 };
 
 const OutingForm = ({ onSubmit, form, tags, forEdit }: Props) => {
-  const tagsForAutocomplete = tags.map(tag => ({ title: tag }));
-
   const {
     control,
     formState: { isValid },
@@ -41,25 +39,25 @@ const OutingForm = ({ onSubmit, form, tags, forEdit }: Props) => {
   return (
     <form onSubmit={onSubmit}>
       <Controller
-        name="title"
+        name="name"
         control={control}
         rules={{ required: true }}
         render={({ field: { onChange, value } }) => (
           <TextField
-            id="title"
+            id="name"
             value={value || ''} // add a default empty string if value is undefined
             onChange={onChange}
-            placeholder="Title (required)"
+            placeholder="Name (required)"
             className={styles.formItem}
             inputProps={{ style: { fontSize: 20, lineHeight: 1.5 } }} // font size of input text
             InputLabelProps={{ style: { fontSize: 20, lineHeight: 1.5 } }} // font size of input label
             variant="outlined"
-            label={<Typography className={styles.label}>Title (required)</Typography>}
+            label={<Typography className={styles.label}>Name (required)</Typography>}
             InputProps={{
               endAdornment: (
                 <IconButton
                   sx={{ visibility: value ? 'visible' : 'hidden' }}
-                  onClick={() => resetField('title')}
+                  onClick={() => resetField('name')}
                 >
                   <Cancel htmlColor="var(--clr-foreground)" />
                 </IconButton>
@@ -122,51 +120,52 @@ const OutingForm = ({ onSubmit, form, tags, forEdit }: Props) => {
       <Controller
         name="tags"
         control={control}
-        render={({ field: { onChange, value } }) => (
-          <Autocomplete
-            freeSolo
-            multiple
-            id="tags"
-            options={tagsForAutocomplete}
-            // Workaround to avoid hiding by ios keyboard
-            onOpen={e =>
-              setTimeout(
-                () => (e.target as HTMLElement).scrollIntoView({ block: 'end' }),
-                200
-              )
-            }
-            value={value?.split('|') || []}
-            onChange={(_, data) => {
-              onChange(
-                data.map(item => (typeof item === 'string' ? item : item.title)).join('|')
-              );
-            }}
-            getOptionLabel={option =>
-              typeof option === 'string' ? option : option.title
-            }
-            filterSelectedOptions
-            renderInput={params => <TextField {...params} placeholder="Choose a tag" />}
-            // Change style & color of each selectable option
-            renderOption={(props, option) => {
-              const { title } = option;
-              const color = stringToColor(title);
-              return (
-                <span style={{ backgroundColor: 'var(--clr-background' }} {...props}>
-                  <span
-                    className={styles.autocompleteItemInner}
-                    style={{ borderColor: color, color }}
-                  >
-                    {title}
+        render={({ field: { onChange, value } }) => {
+          return (
+            <Autocomplete
+              freeSolo
+              multiple
+              id="tags"
+              options={tags}
+              // Workaround to avoid hiding by ios keyboard
+              onOpen={(e) =>
+                setTimeout(
+                  () => (e.target as HTMLElement).scrollIntoView({ block: 'end' }),
+                  200
+                )
+              }
+              value={value || []}
+              onChange={(_, data) => {
+                onChange(data);
+              }}
+              // getOptionLabel={(option) =>
+              //   typeof option === 'string' ? option : option.title
+              // }
+              filterSelectedOptions
+              renderInput={(params) => (
+                <TextField {...params} placeholder="Choose a tag" />
+              )}
+              // Change style & color of each selectable option
+              renderOption={(props, option) => {
+                const color = stringToColor(option);
+                return (
+                  <span style={{ backgroundColor: 'var(--clr-background' }} {...props}>
+                    <span
+                      className={styles.autocompleteItemInner}
+                      style={{ borderColor: color, color }}
+                    >
+                      {option}
+                    </span>
                   </span>
-                </span>
-              );
-            }}
-            // Autocomplete list had visible white background
-            ListboxProps={{
-              sx: { backgroundColor: 'var(--clr-background)', paddingY: 0 },
-            }}
-          />
-        )}
+                );
+              }}
+              // Autocomplete list had visible white background
+              ListboxProps={{
+                sx: { backgroundColor: 'var(--clr-background)', paddingY: 0 },
+              }}
+            />
+          );
+        }}
       />
 
       {!forEdit && (

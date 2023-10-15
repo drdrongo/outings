@@ -10,7 +10,7 @@ const Settings: NextPageWithLayout = () => {
 
   return (
     <main className={styles.main}>
-      <Button onClick={logout}>Sign Out</Button>;
+      <Button onClick={logout}>Sign Out</Button>
     </main>
   );
 };

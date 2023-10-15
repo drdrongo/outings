@@ -1,58 +1,66 @@
-import { useEffect, useMemo, ReactElement } from 'react';
+import { useEffect, ReactElement, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
-import styles from '@/styles/EditOuting.module.css';
+import styles from './styles.module.css';
 import type { NextPageWithLayout } from '@/pages/_app';
-import { useOutingsContext } from '@/providers/OutingsProvider';
-import { useAlertContext } from '@/providers/AlertProvider';
+import { Outing, useOutingsContext } from '@/providers/OutingsProvider';
 import OutingForm, { Inputs } from '@/components/OutingForm';
 import Layout from '@/components/Layout';
 
 const EditOuting: NextPageWithLayout = () => {
   const router = useRouter();
-
   const { id } = router.query;
-
-  const { addAlert } = useAlertContext();
   const { updateOuting, allTags, getOuting } = useOutingsContext();
+  const [outing, setOuting] = useState<Outing | null>(null);
 
-  const outing = useMemo(() => {
-    if (!id || Array.isArray(id)) {
-      return undefined;
-    }
+  const form = useForm<Inputs>({
+    mode: 'onChange',
+    defaultValues: {
+      name: outing?.name || '',
+      description: outing?.description || '',
+      mapUrl: outing?.mapUrl || '',
+      tags: outing?.tags?.map(({ id }) => id) || [],
+    },
+  });
 
-    return getOuting(id);
-  }, [id, getOuting]);
-
-  const form = useForm<Inputs>({ mode: 'onChange' });
-
-  const onSubmit: SubmitHandler<Inputs> = async data => {
-    if (!outing) {
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    if (!outing || !outing.id) {
       console.error('Error while updating');
       return;
     }
 
-    const isOkay = await updateOuting(outing.get('uuid'), data);
-    if (!isOkay) {
-      addAlert({ severity: 'error', label: 'Failed to Update Outing' });
-    } else {
-      addAlert({ severity: 'success', label: 'Outing Updated' });
-      // Navigate back to list
-      router.push('/outings');
+    const saveSuccess = await updateOuting(outing.id, {
+      ...data,
+      deleted: false,
+      completed: false,
+    });
+    if (saveSuccess) {
+      router.push('/outings'); // Navigate back to list
     }
   };
 
   useEffect(() => {
     form.reset(
       {
-        title: outing?.get('title'),
-        description: outing?.get('description'),
-        mapUrl: outing?.get('mapUrl'),
-        tags: outing?.get('tags'),
+        name: outing?.name || '',
+        description: outing?.description || '',
+        mapUrl: outing?.mapUrl || '',
+        tags: outing?.tags?.map(({ id }) => id) || [],
       },
       { keepDefaultValues: true }
     );
   }, [outing]);
+
+  useEffect(() => {
+    (async () => {
+      if (!id || Array.isArray(id)) {
+        return;
+      }
+
+      const fetchedOuting = await getOuting(id);
+      setOuting(fetchedOuting);
+    })();
+  }, [id]);
 
   return (
     <main className={styles.main}>

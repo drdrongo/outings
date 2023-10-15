@@ -1,39 +1,33 @@
-import { useOutingsContext } from '@/providers/OutingsProvider';
-import styles from './styles.module.css';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { useAlertContext } from '@/providers/AlertProvider';
-import { useRouter } from 'next/router';
-import OutingForm, { Inputs } from '@/components/OutingForm';
 import type { ReactElement } from 'react';
 import type { NextPageWithLayout } from '@/pages/_app';
+import styles from './styles.module.css';
+import { useOutingsContext } from '@/providers/OutingsProvider';
 import Layout from '@/components/Layout';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import OutingForm, { Inputs } from '@/components/OutingForm';
+import { useRouter } from 'next/router';
 
 const NewOuting: NextPageWithLayout = () => {
-  const router = useRouter();
-
-  const { addAlert } = useAlertContext();
   const { addOuting, allTags } = useOutingsContext();
+  const router = useRouter();
+  const form = useForm<Inputs>({
+    mode: 'onChange',
+    defaultValues: {
+      name: '',
+      description: '',
+      mapUrl: '',
+      tags: [],
+    },
+  });
 
-  const form = useForm<Inputs>({ mode: 'onChange' });
-
-  const onSubmit: SubmitHandler<Inputs> = async data => {
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const { continueAdding } = data;
     delete data.continueAdding;
-
-    const isOkay = await addOuting(data);
-    if (!isOkay) {
-      addAlert({ severity: 'error', label: 'Failed to Create Outing' });
-      return;
-    } else {
-      addAlert({ severity: 'success', label: 'Outing Created' });
-    }
-
+    await addOuting({ ...data, deleted: false, completed: false });
     if (continueAdding) {
-      // Stay on form
-      form.reset();
+      form.reset(); // Stay on form
     } else {
-      // Navigate back to list
-      router.push('/outings');
+      router.push('/outings'); // Navigate back to list
     }
   };
 
@@ -42,7 +36,6 @@ const NewOuting: NextPageWithLayout = () => {
       <header className={styles.header}>
         <h3>New Outing</h3>
       </header>
-
       <OutingForm
         form={form}
         onSubmit={form.handleSubmit(onSubmit)}

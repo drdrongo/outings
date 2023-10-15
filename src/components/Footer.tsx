@@ -1,5 +1,5 @@
 import styles from '@/components/Footer.module.css';
-import { AccountCircleOutlined, Add, History, HomeOutlined, Search } from '@mui/icons-material';
+import { Add, HomeOutlined, Settings } from '@mui/icons-material';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -13,29 +13,33 @@ const Footer: React.FC = () => {
     <div className={styles.footer}>
       <Link
         href="/"
-        className={clsx(styles.navButton, ['/', '/outings'].includes(router.pathname) ? styles.active : '')}
+        className={clsx(
+          styles.navButton,
+          router.pathname === '/outings' ? styles.active : ''
+        )}
       >
         <HomeOutlined fontSize="large" />
       </Link>
 
-      {/* <Link href="/" className={clsx(styles.navButton, router.pathname == '/outings/search' ? styles.active : '')}>
-        <Search fontSize="large" />
-      </Link> */}
-
       <Link
         href="/outings/new"
-        className={clsx(styles.navButton, router.pathname == '/outings/new' ? styles.active : '')}
+        className={clsx(
+          styles.navButton,
+          router.pathname === '/outings/new' ? styles.active : ''
+        )}
       >
         <Add fontSize="large" />
       </Link>
-      {/* 
-      <Link href="/" className={clsx(styles.navButton, router.pathname == '/outings/history' ? styles.active : '')}>
-        <History fontSize="large" />
-      </Link> */}
 
-      {/* <Link href="/" className={clsx(styles.navButton, router.pathname == '/outings/profile' ? styles.active : '')}>
-        <AccountCircleOutlined fontSize="large" />
-      </Link> */}
+      <Link
+        href="/settings"
+        className={clsx(
+          styles.navButton,
+          router.pathname === '/settings' ? styles.active : ''
+        )}
+      >
+        <Settings fontSize="large" />
+      </Link>
     </div>
   );
 };
