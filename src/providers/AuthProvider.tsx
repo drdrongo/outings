@@ -8,7 +8,6 @@ import {
   signOut,
 } from 'firebase/auth';
 import { auth } from '@/firebase';
-import { useRouter } from 'next/router';
 
 interface AuthContextType {
   currentUser: User | null;
@@ -25,20 +24,21 @@ export const AuthContext = createContext<AuthContextType>({
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const router = useRouter();
 
-  onAuthStateChanged(auth, user => {
+  onAuthStateChanged(auth, (user) => {
+    if (currentUser === user) return;
+
     setCurrentUser(user);
   });
 
   const login = async (email: string, password: string) =>
     setPersistence(auth, browserSessionPersistence)
       .then(() => signInWithEmailAndPassword(auth, email, password))
-      .then(userCredential => {
+      .then((userCredential) => {
         // Signed in
         const user = userCredential.user;
       })
-      .catch(error => {
+      .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.error({ errorCode, errorMessage });
@@ -46,17 +46,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       });
 
   const logout = () =>
-    signOut(auth)
-      .then(() => {
-        // Sign-out successful.
-        router.push('/logout-successful');
-      })
-      .catch(error => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        console.error({ errorCode, errorMessage });
-        return error;
-      });
+    signOut(auth).catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.error({ errorCode, errorMessage });
+      return error;
+    });
 
   return (
     <AuthContext.Provider value={{ currentUser, login, logout }}>

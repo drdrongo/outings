@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import styles from './Layout.module.css';
 import Footer from './Footer';
 import clsx from 'clsx';
@@ -15,14 +15,9 @@ interface Props {
 }
 
 export default function Layout({ children, className, title = 'Outings' }: Props) {
-  const router = useRouter();
   const { loading } = useOutingsContext();
   const { currentUser } = useAuthContext();
-
-  if (!currentUser) {
-    router.push('/login');
-    return;
-  }
+  const router = useRouter();
 
   return (
     <div className={styles.heroContainer}>

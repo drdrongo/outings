@@ -6,8 +6,10 @@ import type { NextPageWithLayout } from '@/pages/_app';
 import { Outing, useOutingsContext } from '@/providers/OutingsProvider';
 import OutingForm, { Inputs } from '@/components/OutingForm';
 import Layout from '@/components/Layout';
+import { useAuthContext } from '@/providers/AuthProvider';
 
 const EditOuting: NextPageWithLayout = () => {
+  const { currentUser } = useAuthContext();
   const router = useRouter();
   const { id } = router.query;
   const { updateOuting, allTags, getOuting } = useOutingsContext();
@@ -62,18 +64,26 @@ const EditOuting: NextPageWithLayout = () => {
     })();
   }, [id]);
 
+  useEffect(() => {
+    if (currentUser) {
+      router.push('/outings');
+    }
+  }, [currentUser]);
+
   return (
     <main className={styles.main}>
       <header className={styles.header}>
         <h3>Edit Outing</h3>
       </header>
 
-      <OutingForm
-        form={form}
-        onSubmit={form.handleSubmit(onSubmit)}
-        tags={allTags}
-        forEdit={true}
-      />
+      <section className={styles.formSection}>
+        <OutingForm
+          form={form}
+          onSubmit={form.handleSubmit(onSubmit)}
+          tags={allTags}
+          forEdit={true}
+        />
+      </section>
     </main>
   );
 };
