@@ -69,7 +69,7 @@ const Login = () => {
           <Controller
             name="password"
             control={control}
-            rules={{ required: true }}
+            rules={{ required: true, minLength: 6 }}
             render={({ field: { onChange, value } }) => (
               <TextField
                 id="password"

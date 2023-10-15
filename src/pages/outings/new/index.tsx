@@ -35,8 +35,8 @@ const NewOuting: NextPageWithLayout = () => {
   };
 
   useEffect(() => {
-    if (currentUser) {
-      router.push('/outings');
+    if (!currentUser) {
+      router.push('/login');
     }
   }, [currentUser]);
 

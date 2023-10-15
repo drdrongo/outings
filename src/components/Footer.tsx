@@ -12,7 +12,7 @@ const Footer: React.FC = () => {
   return (
     <div className={styles.footer}>
       <Link
-        href="/"
+        href="/outings"
         className={clsx(
           styles.navButton,
           router.pathname === '/outings' ? styles.active : ''

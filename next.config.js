@@ -21,17 +21,6 @@ const nextConfig = withPWA({
 
     return config;
   },
-
-  // async redirects() {
-  //   return [
-  //     {
-  //       source: '/',
-  //       destination: '/outings',
-  //       // permanent: process.env.NODE_ENV !== 'development',
-  //       permanent: false,
-  //     },
-  //   ];
-  // },
 });
 
 module.exports = nextConfig;

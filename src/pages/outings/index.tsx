@@ -16,8 +16,8 @@ const Home: NextPageWithLayout = () => {
   const rows = useMemo(() => outings.filter(({ deleted }) => !deleted), [outings]);
 
   useEffect(() => {
-    if (currentUser) {
-      router.push('/outings');
+    if (!currentUser) {
+      router.push('/login');
     }
   }, [currentUser]);
 
