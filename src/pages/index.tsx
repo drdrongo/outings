@@ -16,6 +16,11 @@ const Home = () => {
     }
   }, [currentUser]);
 
+  // TODOS：
+  // 1. Fix the margins on the form
+  // 2. Input the existing outings
+  // 3. Make outings user-specific
+
   return (
     <div className={styles.heroContainer}>
       <main className={styles.main}>
