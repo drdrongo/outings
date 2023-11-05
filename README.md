@@ -13,6 +13,12 @@
 [] After hitting 'X' (name), it should keep the input focused.
 [] Loading spinner doesnt appear
 [] Overall scroll container
+[] Last item in the list's options dont show well (scroll bottom of screen)
+[] 'completed' alert msg incorrect
+[] clicked button shadows
+[] List should start at top not bottom
+[] Unsuccessful login message
+[] Filter by tags (click a tag to filter the list by it?)
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
