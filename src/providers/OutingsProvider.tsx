@@ -3,6 +3,8 @@ import {
   DocumentData,
   DocumentReference,
   FieldValue,
+  Timestamp,
+  addDoc,
   collection,
   deleteDoc,
   doc,
@@ -16,7 +18,6 @@ import {
   where,
 } from 'firebase/firestore';
 import { db } from '@/firebase';
-import { uuid } from '@/utils/uuid';
 import { useAuthContext } from './AuthProvider';
 import { useCoupleContext } from './CoupleProvider';
 
@@ -82,7 +83,6 @@ export const OutingsProvider = ({ children }: { children: ReactNode }) => {
   const coupleTagsId = `tags_${coupleId}`;
   const coupleOutingsId = `outings_${coupleId}`;
 
-  // const getOuting = (id: string) => outings.find((row) => row.id === id);
   async function getOuting(id: string) {
     if (!currentUser) return null;
 
@@ -92,7 +92,6 @@ export const OutingsProvider = ({ children }: { children: ReactNode }) => {
       const outingSnapshot = await getDoc(outingRef);
       if (outingSnapshot.exists()) {
         const {
-          id,
           name,
           description,
           deleted,
@@ -103,7 +102,7 @@ export const OutingsProvider = ({ children }: { children: ReactNode }) => {
           updatedAt,
         } = outingSnapshot.data();
         const foundOuting: Outing = {
-          id,
+          id: outingSnapshot.id,
           name,
           description,
           deleted,
@@ -195,27 +194,38 @@ export const OutingsProvider = ({ children }: { children: ReactNode }) => {
         })
       );
 
-      // Generating id here:
-      const outingId = outingData.id ?? uuid();
-      const outingRef = doc(db, coupleOutingsId, outingId);
-
+      let outingRef: DocumentReference<DocumentData, DocumentData> | undefined;
       // Save the outing data + its tags
-      await setDoc(outingRef, {
-        ...outingData,
-        id: outingId,
-        tags: tagRefs,
-        ...(!outingData.id && { createdAt: serverTimestamp() }),
-        updatedAt: serverTimestamp(),
-      });
-
-      // Re-fetch the outing to be used in local state
-      const updatedOutingSnapshot = await getDoc(outingRef);
-      if (!updatedOutingSnapshot.exists()) {
-        throw new Error('Missing updatedOutingSnapshot');
+      if (!outingData.id) {
+        const coupleOutingsCollection = collection(db, coupleOutingsId);
+        const savedOuting = await addDoc(coupleOutingsCollection, {
+          ...outingData,
+          tags: tagRefs,
+          createdAt: Timestamp.now(),
+          updatedAt: Timestamp.now(),
+        });
+        outingRef = doc(db, coupleOutingsId, savedOuting.id);
+      } else {
+        outingRef = doc(db, coupleOutingsId, outingData.id);
+        await setDoc(outingRef, {
+          ...outingData,
+          tags: tagRefs,
+          updatedAt: serverTimestamp(),
+        });
       }
 
-      const updatedOutingData = updatedOutingSnapshot.data() as Outing;
-      return updatedOutingData;
+      // Re-fetch the outing to be used in local state
+      const savedOutingSnapshot = await getDoc(outingRef);
+      if (!savedOutingSnapshot.exists()) {
+        throw new Error('Missing savedOutingSnapshot');
+      }
+
+      const savedOutingData = {
+        id: savedOutingSnapshot.id,
+        ...savedOutingSnapshot.data(),
+      } as Outing;
+
+      return savedOutingData;
     } catch (error) {
       console.error('Error checking document existence:', error);
       return null;

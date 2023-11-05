@@ -1,13 +1,11 @@
-import { useMemo, type ReactElement, useEffect } from 'react';
+import { type ReactElement, useEffect } from 'react';
 import styles from './styles.module.css';
 import type { NextPageWithLayout } from '@/pages/_app';
-import { useOutingsContext } from '@/providers/OutingsProvider';
 import Layout from '@/components/Layout';
 import OutingList from '@/components/OutingList';
 import Image from 'next/image';
 import { useAuthContext } from '@/providers/AuthProvider';
 import { useRouter } from 'next/router';
-import { useCoupleContext } from '@/providers/CoupleProvider';
 
 const Home: NextPageWithLayout = () => {
   const { currentUser } = useAuthContext();

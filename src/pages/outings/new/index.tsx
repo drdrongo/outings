@@ -36,7 +36,7 @@ const NewOuting: NextPageWithLayout = () => {
     addAlert(getOutingAlertMsg(!!addSuccess, 'add'));
 
     if (continueAdding) {
-      form.reset(); // Stay on form
+      form.reset({ continueAdding: true }); // Stay on form
     } else {
       router.push('/outings'); // Navigate back to list
     }

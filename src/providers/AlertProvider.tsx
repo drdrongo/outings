@@ -1,6 +1,7 @@
 import { Alert, AlertColor } from '@mui/material';
 import { ReactNode, createContext, useContext, useState } from 'react';
 import styles from '@/components/Alerts.module.css';
+import { uuid } from '@/utils/uuid';
 
 interface ContextType {
   addAlert: Function;
@@ -16,6 +17,7 @@ interface ContextType {
 interface IAlert {
   severity: AlertColor | undefined;
   label: string;
+  id?: string;
 }
 
 export const AlertContext = createContext<ContextType>({
@@ -36,9 +38,10 @@ export const AlertProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const addAlert = (alert: IAlert) => {
-    setAlerts((prev) => [...prev, alert]);
+    const alertId = uuid();
+    setAlerts((prev) => [...prev, { ...alert, id: alertId }]);
     setTimeout(() => {
-      setAlerts((prev) => prev.filter((alt) => alt.label !== alert.label));
+      setAlerts((prev) => prev.filter((alt) => alt.id !== alertId));
     }, 5000);
   };
 
@@ -46,9 +49,9 @@ export const AlertProvider = ({ children }: { children: ReactNode }) => {
     <AlertContext.Provider value={{ addAlert, getOutingAlertMsg }}>
       <>
         <div className={styles.alertBox}>
-          {alerts.map(({ severity, label }) => {
+          {alerts.map(({ severity, label, id }) => {
             return (
-              <Alert key={label} severity={severity} className={styles.alert}>
+              <Alert key={id} severity={severity} className={styles.alert}>
                 {label}
               </Alert>
             );

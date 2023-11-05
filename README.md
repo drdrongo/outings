@@ -8,6 +8,11 @@
 [] Move it over to flutter (& get an apple developer account)
 [] Make it usable offline (?)
 [] Make a 'dev' and 'prod' database
+[] Change 'return' functionality when adding outing
+[] 'Continue adding outings' broken
+[] After hitting 'X' (name), it should keep the input focused.
+[] Loading spinner doesnt appear
+[] Overall scroll container
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
