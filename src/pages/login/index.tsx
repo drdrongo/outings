@@ -31,6 +31,7 @@ const Login = () => {
     if (currentUser) {
       router.push('/outings');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
 
   return (

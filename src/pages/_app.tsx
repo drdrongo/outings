@@ -10,6 +10,8 @@ import MuiThemeProvider from '@/providers/MuiThemeProvider';
 import { OutingsProvider } from '@/providers/OutingsProvider';
 import { ThemeProvider } from '@/providers/ThemeProvider';
 import { StyledEngineProvider } from '@mui/material';
+import { CoupleProvider } from '@/providers/CoupleProvider';
+import { LoadingProvider } from '@/providers/LoadingProvider';
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
   getLayout?: (page: ReactElement) => ReactNode;
@@ -36,13 +38,17 @@ export default function App({ Component, pageProps }: AppPropsWithLayout) {
         <MuiThemeProvider>
           <QueryClientProvider client={queryClient}>
             <ThemeProvider>
-              <AuthProvider>
-                <AlertProvider>
-                  <OutingsProvider>
-                    {getLayout(<Component {...pageProps} />)}
-                  </OutingsProvider>
-                </AlertProvider>
-              </AuthProvider>
+              <LoadingProvider>
+                <AuthProvider>
+                  <AlertProvider>
+                    <CoupleProvider>
+                      <OutingsProvider>
+                        {getLayout(<Component {...pageProps} />)}
+                      </OutingsProvider>
+                    </CoupleProvider>
+                  </AlertProvider>
+                </AuthProvider>
+              </LoadingProvider>
             </ThemeProvider>
           </QueryClientProvider>
         </MuiThemeProvider>

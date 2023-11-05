@@ -7,6 +7,7 @@ import { useOutingsContext } from '@/providers/OutingsProvider';
 import { CircularProgress } from '@mui/material';
 import { useAuthContext } from '@/providers/AuthProvider';
 import { useRouter } from 'next/router';
+import { useLoadingContext } from '@/providers/LoadingProvider';
 
 interface Props {
   children?: ReactNode;
@@ -15,9 +16,7 @@ interface Props {
 }
 
 export default function Layout({ children, className, title = 'Outings' }: Props) {
-  const { loading } = useOutingsContext();
-  const { currentUser } = useAuthContext();
-  const router = useRouter();
+  const { isLoading } = useLoadingContext();
 
   return (
     <div className={styles.heroContainer}>
@@ -28,13 +27,12 @@ export default function Layout({ children, className, title = 'Outings' }: Props
       </Head>
 
       <div className={clsx(styles.contentContainer, className)}>
-        {loading ? (
+        {isLoading && (
           <div className={styles.loading}>
             <CircularProgress color="secondary" />
           </div>
-        ) : (
-          children
         )}
+        {children}
       </div>
 
       <Footer />

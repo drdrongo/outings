@@ -7,11 +7,15 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import OutingForm, { Inputs } from '@/components/OutingForm';
 import { useRouter } from 'next/router';
 import { useAuthContext } from '@/providers/AuthProvider';
+import { useLoadingContext } from '@/providers/LoadingProvider';
+import { useAlertContext } from '@/providers/AlertProvider';
 
 const NewOuting: NextPageWithLayout = () => {
   const { addOuting, allTags } = useOutingsContext();
   const { currentUser } = useAuthContext();
   const router = useRouter();
+  const { addAlert, getOutingAlertMsg } = useAlertContext();
+  const { startLoading, stopLoading } = useLoadingContext();
 
   const form = useForm<Inputs>({
     mode: 'onChange',
@@ -26,7 +30,11 @@ const NewOuting: NextPageWithLayout = () => {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const { continueAdding } = data;
     delete data.continueAdding;
-    await addOuting({ ...data, deleted: false, completed: false });
+    startLoading();
+    const addSuccess = await addOuting({ ...data, deleted: false, completed: false });
+    stopLoading();
+    addAlert(getOutingAlertMsg(!!addSuccess, 'add'));
+
     if (continueAdding) {
       form.reset(); // Stay on form
     } else {
@@ -38,6 +46,7 @@ const NewOuting: NextPageWithLayout = () => {
     if (!currentUser) {
       router.push('/login');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
 
   return (

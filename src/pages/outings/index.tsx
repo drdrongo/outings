@@ -7,18 +7,17 @@ import OutingList from '@/components/OutingList';
 import Image from 'next/image';
 import { useAuthContext } from '@/providers/AuthProvider';
 import { useRouter } from 'next/router';
+import { useCoupleContext } from '@/providers/CoupleProvider';
 
 const Home: NextPageWithLayout = () => {
-  const { outings } = useOutingsContext();
   const { currentUser } = useAuthContext();
   const router = useRouter();
-
-  const rows = useMemo(() => outings.filter(({ deleted }) => !deleted), [outings]);
 
   useEffect(() => {
     if (!currentUser) {
       router.push('/login');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser]);
 
   return (
@@ -34,7 +33,7 @@ const Home: NextPageWithLayout = () => {
         <h3>Outings</h3>
       </header>
 
-      <OutingList rows={rows} />
+      <OutingList />
     </main>
   );
 };

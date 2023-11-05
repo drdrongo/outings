@@ -1,3 +1,14 @@
+# TODOS:
+
+[] Migrate from NextJS to vite with React Router (not necessary if switching to flutter)
+[] Add a page for deleting tags
+[] Sign-up
+[] Connect with partner feature
+[] Add the 'user' column to outings so you can see who made it
+[] Move it over to flutter (& get an apple developer account)
+[] Make it usable offline (?)
+[] Make a 'dev' and 'prod' database
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
@@ -38,4 +49,5 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
 # next-test
+
 # outings

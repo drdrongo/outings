@@ -43,7 +43,9 @@ const OutingListItem = ({ row, deleteRow }: Props) => {
             className={clsx([styles.chevron, open && styles.chevronOpen])}
           />
         </h3>
-        <p className={styles.description}>{row.description}</p>
+        {row.description.length > 0 && (
+          <p className={styles.description}>{row.description}</p>
+        )}
         {row.tags?.length > 0 && (
           <div className={styles.tagBox}>
             {row.tags.map(({ id }) => {
